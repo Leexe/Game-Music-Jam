@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6b25b22695fcf49ed9e453b1d8a35612
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272963
+  packageName: Better Hierarchy
+  packageVersion: 1.0.2
+  assetPath: Assets/Plugins/Better Hierarchy/Editor/Preferences
+  uploadId: 1023948
