@@ -1,23 +1,58 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class InventorySlotUI : MonoBehaviour, IDropHandler
 {
-	public GameObject StoredItem { get; private set; }
+	[SerializeField]
+	private RectTransform _rectTransform;
+
+	public DraggableUI StoredItem { get; private set; }
 	public bool IsUsed { get; private set; }
 
-	public bool AddItem(GameObject item)
+	private void Reset()
 	{
-		if (IsUsed)
+		_rectTransform = GetComponent<RectTransform>();
+	}
+
+	public bool AddItem(DraggableUI item)
+	{
+		if (!item)
 		{
 			return false;
 		}
 
+		// Dropped back into its own slot
+		if (StoredItem == item)
+		{
+			RealignItem();
+			return false;
+		}
+
+		// You can't swap an item if the source inventory slot is empty
+		if (IsUsed && item.InventorySlot == null)
+		{
+			return false;
+		}
+
+		if (item.InventorySlot)
+		{
+			SwapItem(item);
+		}
+
 		IsUsed = true;
 		StoredItem = item;
-		item.transform.SetParent(transform);
-
+		item.SetInventorySlot(this);
+		RealignItem();
 		return true;
+	}
+
+	public void SwapItem(DraggableUI item)
+	{
+		InventorySlotUI sourceSlot = item.InventorySlot;
+
+		sourceSlot.RemoveItem();
+		sourceSlot.AddItem(StoredItem);
+		RemoveItem();
 	}
 
 	public void RemoveItem()
@@ -28,18 +63,27 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 		}
 
 		IsUsed = false;
+		StoredItem.RemoveFromInventorySlot();
 		StoredItem = null;
 	}
 
-	public void OnBeginDrag(PointerEventData eventData) { }
-
-	public void OnDrag(PointerEventData eventData)
+	public void RealignItem()
 	{
-		throw new System.NotImplementedException();
+		if (!StoredItem)
+		{
+			return;
+		}
+
+		RectTransform itemRect = StoredItem.GetComponent<RectTransform>();
+		itemRect.SetParent(_rectTransform, false);
+		itemRect.anchoredPosition = Vector2.zero;
 	}
 
-	public void OnEndDrag(PointerEventData eventData)
+	public void OnDrop(PointerEventData eventData)
 	{
-		throw new System.NotImplementedException();
+		if (eventData.pointerDrag != null)
+		{
+			AddItem(eventData.pointerDrag.GetComponent<DraggableUI>());
+		}
 	}
 }

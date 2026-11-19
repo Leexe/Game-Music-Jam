@@ -1,14 +1,22 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
 	[SerializeField]
+	[ReadOnly]
 	private List<InventorySlotUI> _invSlots;
 
-	public void AddItemToInventory(GameObject item)
+	public bool AddItemToInventory(DraggableUI item)
 	{
-		InventorySlotUI slot = FindEmptySlot();
+		foreach (InventorySlotUI _ in _invSlots)
+		{
+			InventorySlotUI freeSlot = FindEmptySlot();
+			freeSlot.AddItem(item);
+		}
+
+		return false;
 	}
 
 	private InventorySlotUI FindEmptySlot()
@@ -22,5 +30,11 @@ public class InventoryUI : MonoBehaviour
 		}
 
 		return null;
+	}
+
+	[Button("Find Inventory Slots")]
+	private void FindInventorySlots()
+	{
+		_invSlots = new List<InventorySlotUI>(GetComponentsInChildren<InventorySlotUI>());
 	}
 }
