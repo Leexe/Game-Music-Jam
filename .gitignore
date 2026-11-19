@@ -1,4 +1,7 @@
 # MANUAL ADDITIONS
+# Nested Ink repository metadata
+/Assets/Ink Files/.git
+
 # OS specific
 .DS_Store
 Desktop.ini

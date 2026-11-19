@@ -31,10 +31,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 		StoredItem = null;
 	}
 
-	public void OnBeginDrag(PointerEventData eventData)
-	{
-		if ()
-	}
+	public void OnBeginDrag(PointerEventData eventData) { }
 
 	public void OnDrag(PointerEventData eventData)
 	{
