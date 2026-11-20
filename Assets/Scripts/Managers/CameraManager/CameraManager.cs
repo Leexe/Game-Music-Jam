@@ -4,11 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// The magic camera. Take a photo of a PhotoSpot to get a flash + a polaroid of the past.
+/// </summary>
 public class CameraManager : MonoSingleton<CameraManager>
 {
 	[Header("Flash")]
-	[Tooltip("Full-screen WHITE Image with a CanvasGroup.")]
 	[SerializeField]
 	private CanvasGroup _flash;
 
@@ -16,27 +17,21 @@ public class CameraManager : MonoSingleton<CameraManager>
 	private float _flashDuration = 0.6f;
 
 	[Header("Polaroid")]
-	[Tooltip("Full-screen panel holding the polaroid. Needs a CanvasGroup.")]
 	[SerializeField]
 	private CanvasGroup _polaroid;
 
-	[Tooltip("The white polaroid frame (pops in and tilts).")]
 	[SerializeField]
 	private RectTransform _polaroidFrame;
 
-	[Tooltip("The photo inside the frame.")]
 	[SerializeField]
 	private Image _polaroidPhoto;
 
-	[Tooltip("Optional text under the photo.")]
 	[SerializeField]
 	private TMP_Text _polaroidCaption;
 
-	[Tooltip("Full-screen button on the polaroid panel. Clicking closes the polaroid.")]
 	[SerializeField]
 	private Button _closeButton;
 
-	[Tooltip("How long the photo takes to 'develop'.")]
 	[SerializeField]
 	private float _developDuration = 1.5f;
 
@@ -57,9 +52,9 @@ public class CameraManager : MonoSingleton<CameraManager>
 		_closeButton.onClick.AddListener(ClosePolaroid);
 	}
 
-	
-	// Flash, then show the polaroid of the past for this spot
-	
+	/// <summary>
+	/// Flash, then show the polaroid of the past for this spot
+	/// </summary>
 	public void TakePhoto(PhotoSpot spot)
 	{
 		if (IsBusy)
@@ -67,42 +62,60 @@ public class CameraManager : MonoSingleton<CameraManager>
 			return;
 		}
 
-		IsBusy = true;
 		spot.MarkPhotographed();
-
-		// Fill in the polaroid
-		_polaroidPhoto.sprite = spot.PastImage;
-		_polaroidPhoto.color = new Color(1f, 1f, 1f, 0f); // starts blank, "develops" in
-		if (_polaroidCaption != null)
-		{
-			_polaroidCaption.text = spot.Caption;
-		}
-
-		_polaroidFrame.localEulerAngles = new Vector3(0f, 0f, UnityEngine.Random.Range(-6f, 6f));
-
-		// Flash goes fully white instantly, polaroid is ready behind it
-		_flash.alpha = 1f;
-		_flash.blocksRaycasts = true;
-		_polaroid.alpha = 1f;
-		_polaroid.blocksRaycasts = true;
-
-		Sequence
-			.Create()
-			.Group(Tween.Alpha(_flash, 0f, _flashDuration, Ease.OutQuad))
-			.Group(Tween.Scale(_polaroidFrame, 0.6f, 1f, 0.4f, Ease.OutBack))
-			.Chain(Tween.Alpha(_polaroidPhoto, 1f, _developDuration, Ease.InOutSine))
-			.ChainCallback(() =>
-			{
-				_flash.blocksRaycasts = false;
-				IsBusy = false; // now the player can close it
-			});
-
+		OpenPolaroid(spot.PastImage, spot.Caption, true);
 		OnPhotoTaken?.Invoke(spot);
 	}
 
-	
+	/// <summary>
+	/// Shows a polaroid again (no flash), e.g. when clicking it in the inventory
+	/// </summary>
+	public void ShowPolaroid(Sprite photo, string caption)
+	{
+		if (IsBusy)
+		{
+			return;
+		}
+
+		OpenPolaroid(photo, caption, false);
+	}
+
+	private void OpenPolaroid(Sprite photo, string caption, bool withFlash)
+	{
+		IsBusy = true;
+		Tween.StopAll(_polaroid); // in case it was still closing
+
+		_polaroidPhoto.sprite = photo;
+		_polaroidPhoto.color = new Color(1f, 1f, 1f, withFlash ? 0f : 1f); // new photos "develop" in
+		if (_polaroidCaption != null)
+		{
+			_polaroidCaption.text = caption;
+		}
+
+		_polaroidFrame.localEulerAngles = new Vector3(0f, 0f, UnityEngine.Random.Range(-6f, 6f));
+		_polaroid.alpha = 1f;
+		_polaroid.blocksRaycasts = true;
+
+		Sequence seq = Sequence.Create().Group(Tween.Scale(_polaroidFrame, 0.6f, 1f, 0.4f, Ease.OutBack));
+
+		if (withFlash)
+		{
+			_flash.alpha = 1f;
+			_flash.blocksRaycasts = true;
+			seq = seq.Group(Tween.Alpha(_flash, 0f, _flashDuration, Ease.OutQuad))
+				.Chain(Tween.Alpha(_polaroidPhoto, 1f, _developDuration, Ease.InOutSine));
+		}
+
+		seq.ChainCallback(() =>
+		{
+			_flash.blocksRaycasts = false;
+			IsBusy = false; // now the player can close it
+		});
+	}
+
+	/// <summary>
 	/// Fades the polaroid away
-	
+	/// </summary>
 	public void ClosePolaroid()
 	{
 		if (IsBusy)
