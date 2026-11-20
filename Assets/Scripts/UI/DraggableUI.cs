@@ -1,4 +1,5 @@
 using PrimeTween;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,6 +9,12 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	[Header("References")]
 	[SerializeField]
 	private RectTransform _rectTransform;
+
+	[SerializeField]
+	private RectTransform _imageRectTransform;
+
+	[SerializeField]
+	private TextMeshProUGUI _itemName;
 
 	[SerializeField]
 	private CanvasGroup _canvasGroup;
@@ -41,6 +48,10 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	private void OnEnable()
 	{
 		CacheRootCanvas();
+		if (_itemData)
+		{
+			_itemName.text = _itemData.name;
+		}
 	}
 
 	private void OnCanvasHierarchyChanged()
@@ -111,7 +122,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if (IsInteractable && eventData.button == PointerEventData.InputButton.Left)
+		if (IsInteractable && eventData.button == PointerEventData.InputButton.Left && _itemData)
 		{
 			DialogueManager.Instance.TryShowLine(_itemData.ClickDescription);
 		}
@@ -122,6 +133,13 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		_shakeTween.Stop();
 		_shakeTween = Sequence
 			.Create()
-			.Chain(Tween.PunchLocalRotation(transform, new Vector3(0, 0, _shakeRotation), _shakeDuration));
+			.Chain(Tween.PunchLocalRotation(_imageRectTransform, new Vector3(0, 0, _shakeRotation), _shakeDuration));
 	}
+
+	private void ShowText()
+	{
+		_itemName.text = _itemData.name;
+	}
+
+	private void HideText() { }
 }

@@ -263,9 +263,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 552e73546b0fd4446ab973b279577239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
-  _isPrimary: 1
   _typewriter: {fileID: 5793672468084525755}
   _canvasGroup: {fileID: 1319483819390014763}
+  _isPrimary: 1
+  _standaloneDismissDelay: 3
+  _standaloneFadeDuration: 0.25
 --- !u!225 &1319483819390014763
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1012,7 +1014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.00012207031}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0}
   m_SizeDelta: {x: 1764, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2100494636160947691
@@ -1175,8 +1177,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3903222472590938324}
   m_HandleRect: {fileID: 6149015882407524222}
   m_Direction: 2
-  m_Value: 0.00000014436301
-  m_Size: 0.5263845
+  m_Value: 0.0000000721546
+  m_Size: 0.5262079
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2401,9 +2403,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 552e73546b0fd4446ab973b279577239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
-  _isPrimary: 0
   _typewriter: {fileID: 1186690133704978293}
   _canvasGroup: {fileID: 1663501452579647570}
+  _isPrimary: 0
+  _standaloneDismissDelay: 3
+  _standaloneFadeDuration: 0.25
 --- !u!225 &1663501452579647570
 CanvasGroup:
   m_ObjectHideFlags: 0

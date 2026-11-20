@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-	private static float _effectTimeScale = 1f; // temp effects
-
-	public float RunTime;
 	private Sequence _timeSlowSequence;
 
 	[HideInInspector]
