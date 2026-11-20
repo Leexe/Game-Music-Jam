@@ -15,6 +15,8 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	[Header("Default Values")]
 	private float _dragOpacity = 0.6f;
 
+	private Canvas _rootCanvas;
+
 	public bool IsInteractable { get; private set; } = true;
 
 	[HideInInspector]
@@ -26,11 +28,38 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		_canvasGroup = GetComponent<CanvasGroup>();
 	}
 
+	private void OnEnable()
+	{
+		CacheRootCanvas();
+	}
+
+	private void OnCanvasHierarchyChanged()
+	{
+		CacheRootCanvas();
+	}
+
+	private void CacheRootCanvas()
+	{
+		if (_rootCanvas && _rootCanvas.isRootCanvas && transform.IsChildOf(_rootCanvas.transform))
+		{
+			return;
+		}
+
+		Canvas canvas = GetComponentInParent<Canvas>();
+		_rootCanvas = canvas ? canvas.rootCanvas : null;
+	}
+
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		if (!IsInteractable)
 		{
 			return;
+		}
+
+		if (InventorySlot && _rootCanvas)
+		{
+			_rectTransform.SetParent(_rootCanvas.transform, worldPositionStays: true);
+			_rectTransform.SetAsLastSibling();
 		}
 
 		_canvasGroup.alpha = _dragOpacity;

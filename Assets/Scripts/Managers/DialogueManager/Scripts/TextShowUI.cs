@@ -1,18 +1,24 @@
+using Febucci.TextAnimatorCore;
 using Febucci.TextAnimatorForUnity;
-using TMPro;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(TypewriterComponent))]
+[RequireComponent(typeof(TextAnimator))]
 public class TextShowUI : MonoBehaviour
 {
 	[Header("Behaviour")]
+	[InfoBox("Only the hidden typewriter reports line completion to the dialogue manager.")]
 	[SerializeField]
 	private bool _isPrimary;
 
 	[SerializeField]
 	private bool _clearStandaloneLineOnEnd = true;
 
+	[SerializeField]
 	private TypewriterComponent _typewriter;
+
+	private DialogueManager _dialogueManager;
 	private DialogueState _state;
 	private bool _isStandaloneLine;
 
@@ -23,27 +29,33 @@ public class TextShowUI : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_state = DialogueManager.Instance.DialogueState;
-
-		_state.OnDisplayDialogue += ShowLine;
-		_state.OnTypewriterSkip += _typewriter.SkipTypewriter;
-		_state.OnEndStory += HandleDialogueEnded;
-		DialogueManager.Instance.OnDialogueStarted += HandleDialogueStarted;
-
-		if (_isPrimary)
+		_dialogueManager = DialogueManager.Instance;
+		if (_dialogueManager)
 		{
-			_typewriter.onTextShowed.AddListener(_state.TypewriterFinished);
+			_state = _dialogueManager.DialogueState;
+
+			_state.OnDisplayDialogue += ShowLine;
+			_state.OnTypewriterSkip += _typewriter.SkipTypewriter;
+			_state.OnEndStory += HandleDialogueEnded;
+			_dialogueManager.OnDialogueStarted += HandleDialogueStarted;
+
+			if (_isPrimary)
+			{
+				_typewriter.onTextShowed.AddListener(_state.TypewriterFinished);
+			}
 		}
 	}
 
 	private void OnDisable()
 	{
-		_state.OnDisplayDialogue -= ShowLine;
-		_state.OnTypewriterSkip -= _typewriter.SkipTypewriter;
-		_state.OnEndStory -= HandleDialogueEnded;
-		DialogueManager.Instance.OnDialogueStarted -= HandleDialogueStarted;
-
-		_typewriter.onTextShowed.RemoveListener(_state.TypewriterFinished);
+		if (_dialogueManager)
+		{
+			_state.OnDisplayDialogue -= ShowLine;
+			_state.OnTypewriterSkip -= _typewriter.SkipTypewriter;
+			_state.OnEndStory -= HandleDialogueEnded;
+			_dialogueManager.OnDialogueStarted -= HandleDialogueStarted;
+			_typewriter.onTextShowed.RemoveListener(_state.TypewriterFinished);
+		}
 	}
 
 	private void ShowLine(string speaker, string line)

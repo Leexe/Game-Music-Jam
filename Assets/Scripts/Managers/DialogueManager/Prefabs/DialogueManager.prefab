@@ -259,11 +259,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 335692666182653546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae7fb73dd6c8b415a9c1eea828c4d412, type: 3}
+  m_Script: {fileID: 11500000, guid: 552e73546b0fd4446ab973b279577239, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HiddenTypewriter
-  _dialogueManager: {fileID: 4496430893499754350}
-  _hiddenTypewriter: {fileID: 5793672468084525755}
+  m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
+  _isPrimary: 1
+  _clearStandaloneLineOnEnd: 1
+  _typewriter: {fileID: 5793672468084525755}
 --- !u!1 &406456987117468146
 GameObject:
   m_ObjectHideFlags: 0
@@ -998,7 +999,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.000061035156}
+  m_AnchoredPosition: {x: -0.000061035156, y: -0.00012207031}
   m_SizeDelta: {x: 1764, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2100494636160947691
@@ -1161,7 +1162,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3903222472590938324}
   m_HandleRect: {fileID: 6149015882407524222}
   m_Direction: 2
-  m_Value: 0.00000007218151
+  m_Value: 0.00000014436301
   m_Size: 0.5263845
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2013,7 +2014,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4242510407201314251
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2049,7 +2050,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueUI
   _dialogueManager: {fileID: 4496430893499754350}
-  _typewriter: {fileID: 1186690133704978293}
   _dialogueDictionary: {fileID: 11400000, guid: 69438eb58cf3a43199336230d6e29349, type: 2}
   _characterPrefab: {fileID: 6477682457468806699, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
   _leftSpriteTransform: {fileID: 5813942347806033913}
@@ -2113,6 +2113,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241e8dfcddb474bb4b92e3a4a19cf6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   _inkJson: {fileID: 4900000, guid: 1d816753fb9284600bf6c61bcc4f300f, type: 3}
   _characterFadeDuration: 0.5
 --- !u!1 &7339729798253768515
@@ -2163,6 +2172,8 @@ GameObject:
   - component: {fileID: 7068544694545489261}
   - component: {fileID: 4239388268331199064}
   - component: {fileID: 1186690133704978293}
+  - component: {fileID: 4669021792847156632}
+  - component: {fileID: 1663501452579647570}
   m_Layer: 0
   m_Name: Text Box
   m_TagString: Untagged
@@ -2363,6 +2374,36 @@ MonoBehaviour:
   onMessage:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4669021792847156632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652907811619595179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 552e73546b0fd4446ab973b279577239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
+  _isPrimary: 0
+  _clearStandaloneLineOnEnd: 1
+  _typewriter: {fileID: 1186690133704978293}
+--- !u!114 &1663501452579647570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652907811619595179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 552e73546b0fd4446ab973b279577239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _isPrimary: 0
+  _clearStandaloneLineOnEnd: 1
+  _typewriter: {fileID: 0}
 --- !u!1 &7750147527228998033
 GameObject:
   m_ObjectHideFlags: 0
@@ -2622,7 +2663,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2630,7 +2671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2670,11 +2711,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -540.23047
       objectReference: {fileID: 0}
     - target: {fileID: 462698593264857351, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
