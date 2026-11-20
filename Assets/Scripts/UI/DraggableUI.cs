@@ -12,6 +12,9 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	[SerializeField]
 	private CanvasGroup _canvasGroup;
 
+	[SerializeField]
+	private ItemData _itemData;
+
 	[Header("Default Values")]
 	private float _dragOpacity = 0.6f;
 
