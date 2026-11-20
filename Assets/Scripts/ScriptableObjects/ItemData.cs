@@ -1,12 +1,17 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ScriptableObjects
+[CreateAssetMenu(fileName = "ItemData", menuName = "Inventory/ItemData", order = 0)]
+public class ItemData : ScriptableObject
 {
-	[CreateAssetMenu(fileName = "ItemData", menuName = "Inventory/ItemData", order = 0)]
-	public class ItemData : ScriptableObject
-	{
-		public string ItemName;
-		public string ItemDescription;
-		public Sprite Icon;
-	}
+	public string ItemName;
+
+	[TextArea]
+	public string ClickDescription;
+
+	[TextArea]
+	public string Description;
+
+	[PreviewField]
+	public Sprite Icon;
 }

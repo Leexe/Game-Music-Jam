@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 4357006527621079623}
   - component: {fileID: 5793672468084525755}
   - component: {fileID: 6974393313256331556}
+  - component: {fileID: 1319483819390014763}
   m_Layer: 0
   m_Name: Hidden Dialogue
   m_TagString: Untagged
@@ -263,8 +264,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
   _isPrimary: 1
-  _clearStandaloneLineOnEnd: 1
   _typewriter: {fileID: 5793672468084525755}
+  _canvasGroup: {fileID: 1319483819390014763}
+--- !u!225 &1319483819390014763
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335692666182653546}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &406456987117468146
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,6 +1423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueContinueIcon
   _dialogueManager: {fileID: 4496430893499754350}
+  _textView: {fileID: 4669021792847156632}
   _canvasGroup: {fileID: 6498050253955989440}
   _appearDuration: 0.25
   _disappearDuration: 0.15
@@ -2050,6 +2064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueUI
   _dialogueManager: {fileID: 4496430893499754350}
+  _textView: {fileID: 4669021792847156632}
   _dialogueDictionary: {fileID: 11400000, guid: 69438eb58cf3a43199336230d6e29349, type: 2}
   _characterPrefab: {fileID: 6477682457468806699, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
   _leftSpriteTransform: {fileID: 5813942347806033913}
@@ -2387,23 +2402,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
   _isPrimary: 0
-  _clearStandaloneLineOnEnd: 1
   _typewriter: {fileID: 1186690133704978293}
---- !u!114 &1663501452579647570
-MonoBehaviour:
+  _canvasGroup: {fileID: 1663501452579647570}
+--- !u!225 &1663501452579647570
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7652907811619595179}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 552e73546b0fd4446ab973b279577239, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  _isPrimary: 0
-  _clearStandaloneLineOnEnd: 1
-  _typewriter: {fileID: 0}
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7750147527228998033
 GameObject:
   m_ObjectHideFlags: 0
