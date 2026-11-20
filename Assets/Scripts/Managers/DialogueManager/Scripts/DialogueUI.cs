@@ -17,6 +17,10 @@ public class DialogueUI : MonoBehaviour
 	[SerializeField]
 	private DialogueManager _dialogueManager;
 
+	[FoldoutGroup("References/UI References")]
+	[SerializeField]
+	private TextShowUI _textView;
+
 	[FoldoutGroup("References/Game References")]
 	[SerializeField]
 	private DialogueDictionarySO _dialogueDictionary;
@@ -109,6 +113,7 @@ public class DialogueUI : MonoBehaviour
 	{
 		_dialogueState = _dialogueManager.DialogueState;
 		_dialogueManager.OnDialogueStarted += EnableStoryPanel;
+		_textView.StandaloneLineFinished += DisableStoryPanel;
 		_dialogueState.OnDisplayDialogue += UpdateLineSpeaker;
 		_dialogueState.OnCharacterUpdate += UpdateCharacter;
 		_dialogueState.OnCharacterAnimation += PlayAnimation;
@@ -123,6 +128,7 @@ public class DialogueUI : MonoBehaviour
 	private void OnDisable()
 	{
 		_dialogueManager.OnDialogueStarted -= EnableStoryPanel;
+		_textView.StandaloneLineFinished -= DisableStoryPanel;
 		_dialogueState.OnDisplayDialogue -= UpdateLineSpeaker;
 		_dialogueState.OnCharacterUpdate -= UpdateCharacter;
 		_dialogueState.OnCharacterAnimation -= PlayAnimation;

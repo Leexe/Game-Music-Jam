@@ -25,7 +25,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private bool _needToDisplayChoices;
 	private Story _story;
 	private bool _storyPlaying;
-	private bool _standaloneLinePlaying;
 	private bool _typewriterPlaying;
 
 	/// <summary>
@@ -41,6 +40,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// <summary>Supplies the Ink knot name, or null for a standalone line.</summary>
 	public event Action<string> OnDialogueStarted;
 	public event Action OnDialogueEnded;
+	internal event Action OnStandaloneContinue;
 
 	#endregion
 
@@ -173,12 +173,11 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	#region Story Managers
 
 	/// <summary>
-	/// Shows one line until the player presses Continue. Returns false for empty text,
-	/// while another dialogue is active, or when dialogue input is blocked.
+	/// Broadcasts a standalone line. Each display manages its own lifetime.
 	/// </summary>
 	public bool TryShowLine(string text, string speaker = "")
 	{
-		if (string.IsNullOrWhiteSpace(text) || !isActiveAndEnabled || _storyPlaying || _standaloneLinePlaying)
+		if (string.IsNullOrWhiteSpace(text) || !isActiveAndEnabled || _storyPlaying)
 		{
 			return false;
 		}
@@ -187,8 +186,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return false;
 		}
 
-		_standaloneLinePlaying = true;
-		_typewriterPlaying = true;
 		OnDialogueStarted?.Invoke(null);
 		DialogueState.StartDialogue();
 		DialogueState.DisplayDialogue(speaker, text);
@@ -206,7 +203,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return;
 		}
 
-		_standaloneLinePlaying = false;
 		_typewriterPlaying = false;
 		if (_storyPlaying)
 		{
@@ -243,9 +239,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return;
 		}
 
-		// Don't continue if story isn't currently playing
-		if (!_storyPlaying && !_standaloneLinePlaying)
+		if (!_storyPlaying)
 		{
+			OnStandaloneContinue?.Invoke();
 			return;
 		}
 
@@ -253,12 +249,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		if (_typewriterPlaying)
 		{
 			DialogueState.SkipTypewriter();
-			return;
-		}
-
-		if (_standaloneLinePlaying)
-		{
-			ExitStory();
 			return;
 		}
 
@@ -307,7 +297,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private void ExitStory()
 	{
 		_storyPlaying = false;
-		_standaloneLinePlaying = false;
 		_typewriterPlaying = false;
 
 		DialogueState.EndStory();

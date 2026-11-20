@@ -14,6 +14,10 @@ public class DialogueContinueIcon : MonoBehaviour
 
 	[FoldoutGroup("References")]
 	[SerializeField]
+	private TextShowUI _textView;
+
+	[FoldoutGroup("References")]
+	[SerializeField]
 	private CanvasGroup _canvasGroup;
 
 	[FoldoutGroup("Animation Settings")]
@@ -38,6 +42,8 @@ public class DialogueContinueIcon : MonoBehaviour
 		{
 			_dialogueState = _dialogueManager.DialogueState;
 			_dialogueState.OnTypewriterFinish += ShowIcon;
+			_textView.StandaloneTextShown += ShowIcon;
+			_textView.StandaloneLineFinished += HideIcon;
 			_dialogueState.OnStartDialogue += HideIcon;
 			_dialogueState.OnDisplayDialogue += HideIcon;
 			_dialogueState.OnEndStory += HideIcon;
@@ -49,6 +55,8 @@ public class DialogueContinueIcon : MonoBehaviour
 		if (_dialogueState != null)
 		{
 			_dialogueState.OnTypewriterFinish -= ShowIcon;
+			_textView.StandaloneTextShown -= ShowIcon;
+			_textView.StandaloneLineFinished -= HideIcon;
 			_dialogueState.OnStartDialogue -= HideIcon;
 			_dialogueState.OnDisplayDialogue -= HideIcon;
 			_dialogueState.OnEndStory -= HideIcon;
