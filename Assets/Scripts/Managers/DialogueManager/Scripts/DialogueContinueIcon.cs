@@ -10,7 +10,7 @@ public class DialogueContinueIcon : MonoBehaviour
 {
 	[FoldoutGroup("References")]
 	[SerializeField]
-	private DialogueController _dialogueController;
+	private DialogueManager _dialogueManager;
 
 	[FoldoutGroup("References")]
 	[SerializeField]
@@ -34,9 +34,9 @@ public class DialogueContinueIcon : MonoBehaviour
 
 	private void OnEnable()
 	{
-		if (_dialogueController != null)
+		if (_dialogueManager != null)
 		{
-			_dialogueState = _dialogueController.DialogueState;
+			_dialogueState = _dialogueManager.DialogueState;
 			_dialogueState.OnTypewriterFinish += ShowIcon;
 			_dialogueState.OnStartDialogue += HideIcon;
 			_dialogueState.OnDisplayDialogue += HideIcon;

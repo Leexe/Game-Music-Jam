@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Items
+    uniqueID: 1063731193
+    locked: 0
+  - name: Dialogue
+    uniqueID: 2812641143
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1

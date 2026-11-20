@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>
 ///     Acts as the bridge between Ink narrative scripts and Unity gameplay systems.
 /// </summary>
-public class DialogueController : MonoBehaviour
+public class DialogueManager : MonoSingleton<DialogueManager>
 {
 	[FoldoutGroup("References")]
 	[SerializeField]
@@ -25,6 +25,7 @@ public class DialogueController : MonoBehaviour
 	private bool _needToDisplayChoices;
 	private Story _story;
 	private bool _storyPlaying;
+	private bool _standaloneLinePlaying;
 	private bool _typewriterPlaying;
 
 	/// <summary>
@@ -37,6 +38,7 @@ public class DialogueController : MonoBehaviour
 
 	#region Events
 
+	/// <summary>Supplies the Ink knot name, or null for a standalone line.</summary>
 	public event Action<string> OnDialogueStarted;
 	public event Action OnDialogueEnded;
 
@@ -44,13 +46,18 @@ public class DialogueController : MonoBehaviour
 
 	#region Unity Functions
 
-	private void Awake()
+	protected override void OnInitialized()
 	{
+		// Prevent continuing if paused
+		DialogueState.AddBlockingCondition(() => Time.timeScale == 0f);
+
+		if (!_inkJson)
+		{
+			return;
+		}
+
 		_story = new Story(_inkJson.text);
 		InitializeTagHandlers();
-
-		// prevent continuing if paused
-		DialogueState.AddBlockingCondition(() => Time.timeScale == 0f);
 
 		// Bind External Functions
 		_story.BindExternalFunction("IsQuestCompleted", (string questId) => IsQuestCompleted(questId));
@@ -166,15 +173,45 @@ public class DialogueController : MonoBehaviour
 	#region Story Managers
 
 	/// <summary>
+	/// Shows one line until the player presses Continue. Returns false for empty text,
+	/// while another dialogue is active, or when dialogue input is blocked.
+	/// </summary>
+	public bool TryShowLine(string text, string speaker = "")
+	{
+		if (string.IsNullOrWhiteSpace(text) || !isActiveAndEnabled || _storyPlaying || _standaloneLinePlaying)
+		{
+			return false;
+		}
+		if (!DialogueState.CanAdvanceStory)
+		{
+			return false;
+		}
+
+		_standaloneLinePlaying = true;
+		_typewriterPlaying = true;
+		OnDialogueStarted?.Invoke(null);
+		DialogueState.StartDialogue();
+		DialogueState.DisplayDialogue(speaker, text);
+		return true;
+	}
+
+	/// <summary>
 	///     Starts the story from a specified Ink knot.
 	/// </summary>
 	private void StartStory(string knotName)
 	{
+		if (_story == null)
+		{
+			Debug.LogWarning("[DialogueManager] Assign an Ink JSON asset before starting an Ink story.");
+			return;
+		}
+
+		_standaloneLinePlaying = false;
+		_typewriterPlaying = false;
 		if (_storyPlaying)
 		{
 			// Restart the story
 			_storyPlaying = false;
-			_typewriterPlaying = false;
 			_choiceIndex = -1;
 			_currentSpeakerName = "";
 			DialogueState.RemoveAllCharacters();
@@ -207,7 +244,7 @@ public class DialogueController : MonoBehaviour
 		}
 
 		// Don't continue if story isn't currently playing
-		if (!_storyPlaying)
+		if (!_storyPlaying && !_standaloneLinePlaying)
 		{
 			return;
 		}
@@ -216,6 +253,12 @@ public class DialogueController : MonoBehaviour
 		if (_typewriterPlaying)
 		{
 			DialogueState.SkipTypewriter();
+			return;
+		}
+
+		if (_standaloneLinePlaying)
+		{
+			ExitStory();
 			return;
 		}
 
@@ -240,7 +283,7 @@ public class DialogueController : MonoBehaviour
 				ParseTags(_story.currentTags);
 			}
 
-			DisplayDialogue();
+			DisplayLine();
 		}
 		else if (!ChoicesAvailable)
 		{
@@ -264,6 +307,7 @@ public class DialogueController : MonoBehaviour
 	private void ExitStory()
 	{
 		_storyPlaying = false;
+		_standaloneLinePlaying = false;
 		_typewriterPlaying = false;
 
 		DialogueState.EndStory();
@@ -275,9 +319,9 @@ public class DialogueController : MonoBehaviour
 	#region Dialogue Display
 
 	/// <summary>
-	///     Displays the current dialogue line, skipping blank lines.
+	///     Displays the current line
 	/// </summary>
-	private void DisplayDialogue()
+	private void DisplayLine()
 	{
 		string storyLine = _story.currentText;
 

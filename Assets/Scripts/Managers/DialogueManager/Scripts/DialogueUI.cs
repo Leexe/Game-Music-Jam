@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Febucci.TextAnimatorForUnity;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -13,14 +12,10 @@ using UnityEngine.UI;
 /// </summary>
 public class DialogueUI : MonoBehaviour
 {
-	[FoldoutGroup("References/Game References")]
-	[SerializeField]
-	private DialogueController _dialogueController;
-
 	[TitleGroup("References")]
 	[FoldoutGroup("References/Game References")]
 	[SerializeField]
-	private TypewriterComponent _typewriter;
+	private DialogueManager _dialogueManager;
 
 	[FoldoutGroup("References/Game References")]
 	[SerializeField]
@@ -103,6 +98,7 @@ public class DialogueUI : MonoBehaviour
 	// Private Variables
 	private Tween _canvasAlphaTween;
 	private DialogueState _dialogueState;
+	private bool _clearLineOnEnd;
 
 	private void Awake()
 	{
@@ -111,9 +107,9 @@ public class DialogueUI : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_dialogueState = _dialogueController.DialogueState;
-		_dialogueState.OnStartStory += EnableStoryPanel;
-		_dialogueState.OnDisplayDialogue += ChangeStoryText;
+		_dialogueState = _dialogueManager.DialogueState;
+		_dialogueManager.OnDialogueStarted += EnableStoryPanel;
+		_dialogueState.OnDisplayDialogue += UpdateLineSpeaker;
 		_dialogueState.OnCharacterUpdate += UpdateCharacter;
 		_dialogueState.OnCharacterAnimation += PlayAnimation;
 		_dialogueState.OnCharacterRemove += RemoveCharacter;
@@ -122,15 +118,12 @@ public class DialogueUI : MonoBehaviour
 		_dialogueState.OnEndStory += DisableStoryPanel;
 		_dialogueState.OnEndStory += RemoveAllCharacters;
 		_dialogueState.OnAllCharacterRemove += RemoveAllCharacters;
-		_dialogueState.OnTypewriterSkip += SkipTypewriter;
-
-		_typewriter.onTextShowed.AddListener(_dialogueState.TypewriterFinished);
 	}
 
 	private void OnDisable()
 	{
-		_dialogueState.OnStartStory -= EnableStoryPanel;
-		_dialogueState.OnDisplayDialogue -= ChangeStoryText;
+		_dialogueManager.OnDialogueStarted -= EnableStoryPanel;
+		_dialogueState.OnDisplayDialogue -= UpdateLineSpeaker;
 		_dialogueState.OnCharacterUpdate -= UpdateCharacter;
 		_dialogueState.OnCharacterAnimation -= PlayAnimation;
 		_dialogueState.OnCharacterRemove -= RemoveCharacter;
@@ -139,7 +132,6 @@ public class DialogueUI : MonoBehaviour
 		_dialogueState.OnEndStory -= DisableStoryPanel;
 		_dialogueState.OnEndStory -= RemoveAllCharacters;
 		_dialogueState.OnAllCharacterRemove -= RemoveAllCharacters;
-		_dialogueState.OnTypewriterSkip -= SkipTypewriter;
 	}
 
 	private void InitializeAnimationHandlers()
@@ -259,22 +251,22 @@ public class DialogueUI : MonoBehaviour
 	}
 
 	/// <summary>
-	///     Displays a line of dialogue using the typewriter effect.
+	///     Updates the name panel for both Ink lines and standalone lines.
 	/// </summary>
 	/// <param name="characterName">The name of the character speaking.</param>
 	/// <param name="line">The dialogue line to display.</param>
-	private void ChangeStoryText(string characterName, string line)
+	private void UpdateLineSpeaker(string characterName, string line)
 	{
 		ChangeNameText(characterName);
-		_typewriter.ShowText(line);
 	}
 
 	/// <summary>
 	///     Fades in the canvas panel when dialogue begins.
 	/// </summary>
-	/// <param name="knotName">Name of the Ink knot being started (unused for UI).</param>
+	/// <param name="knotName">The Ink knot name, or null for a standalone line.</param>
 	private void EnableStoryPanel(string knotName)
 	{
+		_clearLineOnEnd = knotName == null && !_canvasFadeToggle;
 		if (_canvasFadeToggle)
 		{
 			_canvasAlphaTween.Stop();
@@ -294,6 +286,10 @@ public class DialogueUI : MonoBehaviour
 	/// </summary>
 	private void DisableStoryPanel()
 	{
+		if (_clearLineOnEnd)
+		{
+			ChangeNameText(string.Empty);
+		}
 		if (_canvasFadeToggle)
 		{
 			_canvasAlphaTween.Stop();
@@ -307,18 +303,6 @@ public class DialogueUI : MonoBehaviour
 			_dialogueCanvasGroup.interactable = false;
 			_dialogueCanvasGroup.blocksRaycasts = false;
 		}
-	}
-
-	#endregion
-
-	#region Typewriter
-
-	/// <summary>
-	///     Skips the current typewriter animation to show full text immediately.
-	/// </summary>
-	private void SkipTypewriter()
-	{
-		_typewriter.SkipTypewriter();
 	}
 
 	#endregion
