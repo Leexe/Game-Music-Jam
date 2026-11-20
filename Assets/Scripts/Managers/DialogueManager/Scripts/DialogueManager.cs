@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>
 ///     Acts as the bridge between Ink narrative scripts and Unity gameplay systems.
 /// </summary>
-public class DialogueController : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
 	[FoldoutGroup("References")]
 	[SerializeField]

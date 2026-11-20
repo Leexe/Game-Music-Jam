@@ -1161,8 +1161,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3903222472590938324}
   m_HandleRect: {fileID: 6149015882407524222}
   m_Direction: 2
-  m_Value: 0.00000007222951
-  m_Size: 0.5266993
+  m_Value: 0.00000007218151
+  m_Size: 0.5263845
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2079,7 +2079,7 @@ GameObject:
   - component: {fileID: 2382799599912282527}
   - component: {fileID: 4496430893499754350}
   m_Layer: 0
-  m_Name: DialogueController
+  m_Name: DialogueManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
