@@ -113,7 +113,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	{
 		if (IsInteractable && eventData.button == PointerEventData.InputButton.Left)
 		{
-			DialogueManager.Instance.TryShowLine(gameObject.name);
+			DialogueManager.Instance.TryShowLine(_itemData.ClickDescription);
 		}
 	}
 
