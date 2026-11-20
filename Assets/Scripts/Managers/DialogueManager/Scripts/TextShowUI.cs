@@ -58,6 +58,8 @@ public class TextShowUI : MonoBehaviour
 			_dialogueManager.OnDialogueStarted += HandleDialogueStarted;
 			_typewriter.onTextShowed.AddListener(HandleTextShowed);
 		}
+
+		_typewriter.TextAnimator.SetText(string.Empty);
 	}
 
 	private void OnDisable()

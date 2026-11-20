@@ -1,6 +1,6 @@
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
@@ -16,14 +16,21 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	private ItemData _itemData;
 
 	[Header("Default Values")]
+	[SerializeField]
 	private float _dragOpacity = 0.6f;
 
-	private Canvas _rootCanvas;
+	[SerializeField]
+	private float _shakeRotation = 10f;
 
-	public bool IsInteractable { get; private set; } = true;
+	[SerializeField]
+	private float _shakeDuration = 0.3f;
 
 	[HideInInspector]
 	public InventorySlotUI InventorySlot;
+	public bool IsInteractable { get; private set; } = true;
+
+	private Canvas _rootCanvas;
+	private Sequence _shakeTween;
 
 	private void Reset()
 	{
@@ -67,6 +74,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 		_canvasGroup.alpha = _dragOpacity;
 		_canvasGroup.blocksRaycasts = false;
+		ShakeItem();
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -92,6 +100,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 	public void SetInventorySlot(InventorySlotUI inventorySlot)
 	{
+		ShakeItem();
 		InventorySlot = inventorySlot;
 	}
 
@@ -104,7 +113,15 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	{
 		if (IsInteractable && eventData.button == PointerEventData.InputButton.Left)
 		{
-			DialogueManager.Instance.TryShowLine(gameObject.name);
+			DialogueManager.Instance.TryShowLine(_itemData.ClickDescription);
 		}
+	}
+
+	private void ShakeItem()
+	{
+		_shakeTween.Stop();
+		_shakeTween = Sequence
+			.Create()
+			.Chain(Tween.PunchLocalRotation(transform, new Vector3(0, 0, _shakeRotation), _shakeDuration));
 	}
 }
