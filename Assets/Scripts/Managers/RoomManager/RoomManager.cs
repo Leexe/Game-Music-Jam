@@ -41,7 +41,10 @@ public class RoomManager : MonoSingleton<RoomManager>
 	{
 		_fade.alpha = 0f;
 		_fade.blocksRaycasts = false;
-		GoTo(_startRoom);
+
+		// If the start room was deleted, fall back to the first room that still exists
+		GameObject start = _startRoom != null ? _startRoom : Array.Find(_rooms, r => r != null);
+		GoTo(start);
 	}
 
 	/// <summary>
@@ -65,6 +68,12 @@ public class RoomManager : MonoSingleton<RoomManager>
 		// Where the door is inside the room, so we can zoom toward it
 		Vector2 doorPoint = roomRect.InverseTransformPoint(door.position);
 		Vector2 endPos = startPos - doorPoint * _zoomScale;
+		// Don't slide so far that the room's edges come into view
+		Vector2 maxOffset = roomRect.rect.size * (_zoomScale - 1f) / 2f;
+		Vector2 offset = endPos - startPos;
+		offset.x = Mathf.Clamp(offset.x, -maxOffset.x, maxOffset.x);
+		offset.y = Mathf.Clamp(offset.y, -maxOffset.y, maxOffset.y);
+		endPos = startPos + offset;
 
 		Sequence
 			.Create()
@@ -100,6 +109,11 @@ public class RoomManager : MonoSingleton<RoomManager>
 
 		foreach (GameObject r in _rooms)
 		{
+			if (r == null)
+			{
+				continue;
+			}
+
 			r.SetActive(r == room);
 		}
 

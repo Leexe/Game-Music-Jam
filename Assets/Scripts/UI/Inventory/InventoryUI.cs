@@ -10,13 +10,13 @@ public class InventoryUI : MonoBehaviour
 
 	public bool AddItemToInventory(DraggableUI item)
 	{
-		foreach (InventorySlotUI _ in _invSlots)
+		InventorySlotUI freeSlot = FindEmptySlot();
+		if (freeSlot == null)
 		{
-			InventorySlotUI freeSlot = FindEmptySlot();
-			freeSlot.AddItem(item);
+			return false;
 		}
 
-		return false;
+		return freeSlot.AddItem(item);
 	}
 
 	private InventorySlotUI FindEmptySlot()
