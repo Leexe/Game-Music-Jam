@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6a0c841b212954966bffecb4e2764812
+guid: 3bb9e3fd63df04d76835bfd69ed58d5b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7577122209498149220
-    second: doom_icon_0
+      213: -1309477378041117886
+    second: ui_item_knife_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: doom_icon_0
+      name: ui_item_knife_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 512
-        height: 512
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c9ec32bee77a8d690800000000000000
-      internalID: -7577122209498149220
+      spriteID: 2430378334dc3dde0800000000000000
+      internalID: -1309477378041117886
       vertices: []
       indices: 
       edges: []
