@@ -38,7 +38,8 @@ public class CameraManager : MonoSingleton<CameraManager>
 	// Events
 	[HideInInspector]
 	public Action<PhotoSpot> OnPhotoTaken;
-
+	[HideInInspector]
+	public Action OnPolaroidClosed;
 	public bool IsBusy { get; private set; }
 
 	private void Start()
@@ -124,7 +125,11 @@ public class CameraManager : MonoSingleton<CameraManager>
 		}
 
 		Tween
-			.Alpha(_polaroid, 0f, 0.25f)
-			.OnComplete(() => _polaroid.blocksRaycasts = false);
+	.Alpha(_polaroid, 0f, 0.25f)
+	.OnComplete(() =>
+	{
+		_polaroid.blocksRaycasts = false;
+		OnPolaroidClosed?.Invoke();
+	});
 	}
 }
