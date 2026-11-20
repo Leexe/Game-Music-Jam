@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
 	[Header("References")]
 	[SerializeField]
@@ -68,8 +68,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		InventorySlot = null;
 	}
 
-	public bool IsInInventorySlot()
+	public void OnPointerClick(PointerEventData eventData)
 	{
-		return InventorySlot != null;
+		if (IsInteractable && eventData.button == PointerEventData.InputButton.Left)
+		{
+			DialogueManager.Instance.TryShowLine(gameObject.name);
+		}
 	}
 }

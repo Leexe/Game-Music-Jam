@@ -103,6 +103,7 @@ public class DialogueUI : MonoBehaviour
 	// Private Variables
 	private Tween _canvasAlphaTween;
 	private DialogueState _dialogueState;
+	private bool _clearLineOnEnd;
 
 	private void Awake()
 	{
@@ -112,7 +113,7 @@ public class DialogueUI : MonoBehaviour
 	private void OnEnable()
 	{
 		_dialogueState = _dialogueManager.DialogueState;
-		_dialogueState.OnStartStory += EnableStoryPanel;
+		_dialogueManager.OnDialogueStarted += EnableStoryPanel;
 		_dialogueState.OnDisplayDialogue += ChangeStoryText;
 		_dialogueState.OnCharacterUpdate += UpdateCharacter;
 		_dialogueState.OnCharacterAnimation += PlayAnimation;
@@ -129,7 +130,7 @@ public class DialogueUI : MonoBehaviour
 
 	private void OnDisable()
 	{
-		_dialogueState.OnStartStory -= EnableStoryPanel;
+		_dialogueManager.OnDialogueStarted -= EnableStoryPanel;
 		_dialogueState.OnDisplayDialogue -= ChangeStoryText;
 		_dialogueState.OnCharacterUpdate -= UpdateCharacter;
 		_dialogueState.OnCharacterAnimation -= PlayAnimation;
@@ -140,6 +141,7 @@ public class DialogueUI : MonoBehaviour
 		_dialogueState.OnEndStory -= RemoveAllCharacters;
 		_dialogueState.OnAllCharacterRemove -= RemoveAllCharacters;
 		_dialogueState.OnTypewriterSkip -= SkipTypewriter;
+		_typewriter.onTextShowed.RemoveListener(_dialogueState.TypewriterFinished);
 	}
 
 	private void InitializeAnimationHandlers()
@@ -272,9 +274,10 @@ public class DialogueUI : MonoBehaviour
 	/// <summary>
 	///     Fades in the canvas panel when dialogue begins.
 	/// </summary>
-	/// <param name="knotName">Name of the Ink knot being started (unused for UI).</param>
+	/// <param name="knotName">The Ink knot name, or null for a standalone line.</param>
 	private void EnableStoryPanel(string knotName)
 	{
+		_clearLineOnEnd = knotName == null && !_canvasFadeToggle;
 		if (_canvasFadeToggle)
 		{
 			_canvasAlphaTween.Stop();
@@ -294,6 +297,11 @@ public class DialogueUI : MonoBehaviour
 	/// </summary>
 	private void DisableStoryPanel()
 	{
+		if (_clearLineOnEnd)
+		{
+			_typewriter.TextAnimator.SetText(string.Empty);
+			ChangeNameText(string.Empty);
+		}
 		if (_canvasFadeToggle)
 		{
 			_canvasAlphaTween.Stop();

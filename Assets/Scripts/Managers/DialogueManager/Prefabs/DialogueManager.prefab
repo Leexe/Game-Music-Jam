@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae7fb73dd6c8b415a9c1eea828c4d412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenTypewriter
-  _dialogueController: {fileID: 4496430893499754350}
+  _dialogueManager: {fileID: 4496430893499754350}
   _hiddenTypewriter: {fileID: 5793672468084525755}
 --- !u!1 &406456987117468146
 GameObject:
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b5fee1ca0a34755bea4afc74c63297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueSFX
-  _dialogueController: {fileID: 4496430893499754350}
+  _dialogueManager: {fileID: 4496430893499754350}
   _hiddenTypewriter: {fileID: 5793672468084525755}
   _dialogueDictionary: {fileID: 11400000, guid: 69438eb58cf3a43199336230d6e29349, type: 2}
   _fadeDuration: 1
@@ -1266,7 +1266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 551f75d000f5144f78e212cd73a2b240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BacklogController
-  _dialogueController: {fileID: 4496430893499754350}
+  _dialogueManager: {fileID: 4496430893499754350}
   _backlogText: {fileID: 6185752053319999967}
   _backlogCanvas: {fileID: 50073986713103443}
   _maxBacklog: 50
@@ -1408,7 +1408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80bb723baf9624f0096b54cdb1d7e79b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueContinueIcon
-  _dialogueController: {fileID: 4496430893499754350}
+  _dialogueManager: {fileID: 4496430893499754350}
   _canvasGroup: {fileID: 6498050253955989440}
   _appearDuration: 0.25
   _disappearDuration: 0.15
@@ -2048,7 +2048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec51d2cdb99e41b59ad526615d05f92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueUI
-  _dialogueController: {fileID: 4496430893499754350}
+  _dialogueManager: {fileID: 4496430893499754350}
   _typewriter: {fileID: 1186690133704978293}
   _dialogueDictionary: {fileID: 11400000, guid: 69438eb58cf3a43199336230d6e29349, type: 2}
   _characterPrefab: {fileID: 6477682457468806699, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
@@ -2112,7 +2112,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 241e8dfcddb474bb4b92e3a4a19cf6c3, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueController
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
   _inkJson: {fileID: 4900000, guid: 1d816753fb9284600bf6c61bcc4f300f, type: 3}
   _characterFadeDuration: 0.5
 --- !u!1 &7339729798253768515
