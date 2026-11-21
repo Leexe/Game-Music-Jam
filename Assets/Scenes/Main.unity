@@ -179,14 +179,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2698558820054471783, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: _caption
-      value: 'The paper
-
-'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2698558820054471783, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: _pastImage
       value: 
-      objectReference: {fileID: 21300000, guid: 7cc699699776f4856ba60202ed56f74a, type: 3}
+      objectReference: {fileID: 21300000, guid: c66f403cd38f9455fa096bf8e81e040b, type: 3}
     - target: {fileID: 2698558820054471783, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: _inventoryIcon
       value: 
@@ -265,39 +263,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9999788
+      value: 0.7946733
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.51221865
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.093755975
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0065204375
+      value: 0.31198767
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -190
+      value: 647
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 16
+      value: -211
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 60.762
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 20.443
       objectReference: {fileID: 0}
     - target: {fileID: 4123641722024060329, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.747
+      value: 54.938
       objectReference: {fileID: 0}
     - target: {fileID: 8746513372520840518, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: m_Name
@@ -712,7 +710,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 'DoorToOffice
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1023,14 +1023,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7420364798469750898, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: _caption
-      value: 'The missing kitchen knife
-
-'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7420364798469750898, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: _pastImage
       value: 
-      objectReference: {fileID: 21300000, guid: 7cc699699776f4856ba60202ed56f74a, type: 3}
+      objectReference: {fileID: 21300000, guid: 3bb9e3fd63df04d76835bfd69ed58d5b, type: 3}
     - target: {fileID: 7420364798469750898, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: _inventoryIcon
       value: 
@@ -1070,6 +1068,30 @@ PrefabInstance:
     - target: {fileID: 7916492873846633093, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_PreserveAspect
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598467885240072837, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598467885240072837, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598467885240072837, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598467885240072837, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598467885240072837, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8598467885240072837, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8754652021768625460, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: serializationData.Prefab
@@ -1553,14 +1575,14 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2698558820054471783, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: _caption
-      value: 'The keys to the office
+      value: '
 
 '
       objectReference: {fileID: 0}
     - target: {fileID: 2698558820054471783, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: _pastImage
       value: 
-      objectReference: {fileID: 21300000, guid: 7cc699699776f4856ba60202ed56f74a, type: 3}
+      objectReference: {fileID: 21300000, guid: f25f8fd18d83541d29aee6276c6565a9, type: 3}
     - target: {fileID: 2698558820054471783, guid: ff0bc159afb184e48b5f2eabda843b66, type: 3}
       propertyPath: _inventoryIcon
       value: 
@@ -1751,7 +1773,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 562, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1545785963
@@ -1906,7 +1928,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 'DoorToHallway
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2430,7 +2454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 395, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1944203988
