@@ -103,8 +103,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DraggableUI
   _rectTransform: {fileID: 6350252990366251602}
+  _imageRectTransform: {fileID: 6350252990366251602}
+  _itemName: {fileID: 0}
   _canvasGroup: {fileID: 8568835404502412587}
   _itemData: {fileID: 0}
+  _dragOpacity: 0.6
+  _shakeRotation: 10
+  _shakeDuration: 0.3
   InventorySlot: {fileID: 0}
 --- !u!114 &5285926868351143694
 MonoBehaviour:
