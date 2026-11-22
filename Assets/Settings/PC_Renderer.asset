@@ -21,19 +21,6 @@ MonoBehaviour:
       surfaceData: 2
     screenSpaceSettings:
       normalBlend: 0
---- !u!114 &-1048183222737780447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f54efd94bcf7bd43a040de64f3878af, type: 3}
-  m_Name: Outlines
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::ToonShadersPro.URP.OutlineFeature
-  m_Active: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,8 +49,7 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: -1246098542068100262}
   - {fileID: 1061758445265421077}
-  - {fileID: -1048183222737780447}
-  m_RendererFeatureMap: ad6b866f10d7b46c5a13e664faf7b4ee15035137ae1fbc0e21c13095e91a74f1
+  m_RendererFeatureMap: ad6b866f10d7b46c5a13e664faf7b4ee15035137ae1fbc0e
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

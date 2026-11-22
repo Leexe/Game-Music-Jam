@@ -29,8 +29,8 @@ Material:
     - _BayerMatrix: 2
     - _ColorDepth: 10
     - _DitherDarken: 0
-    - _DitherSpread: 0.3
-    - _DitherStrength: 0.061
+    - _DitherSpread: 0.5
+    - _DitherStrength: 0.06
     m_Colors:
     - _PixelSize: {r: 2, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []

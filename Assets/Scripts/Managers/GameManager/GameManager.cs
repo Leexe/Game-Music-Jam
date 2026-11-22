@@ -15,6 +15,9 @@ public class GameManager : MonoSingleton<GameManager>
 	[HideInInspector]
 	public Action<string> OnItemPickUp;
 
+	[HideInInspector]
+	public Action OnWin;
+
 	public static bool IsPaused { get; private set; }
 
 	// Unity Functions
