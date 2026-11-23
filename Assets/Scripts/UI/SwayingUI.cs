@@ -102,6 +102,11 @@ public class SwayingUI : MonoBehaviour
 
 	[FoldoutGroup("General Settings")]
 	[SerializeField]
+	[Tooltip("Start each enabled sway tween at a random point in its cycle.")]
+	private bool _randomizeStartTime;
+
+	[FoldoutGroup("General Settings")]
+	[SerializeField]
 	private bool _useUnscaledTime;
 
 	private Sequence _positionTween;
@@ -170,6 +175,12 @@ public class SwayingUI : MonoBehaviour
 				.Chain(Tween.UIAnchoredPosition(_rectTransform, _endPosition, _positionDuration, ease: _positionEase));
 		}
 
+		if (_randomizeStartTime && _positionTween.isAlive)
+		{
+			float cycleDuration = _positionTweenType == PositionTweenType.Smooth ? 2f * _positionDuration : _positionDuration;
+			_positionTween.elapsedTimeTotal = Random.Range(0f, cycleDuration);
+		}
+
 		if (_rotationTweenEnable)
 		{
 			float halfDuration = _rotationDuration / 2f;
@@ -183,7 +194,7 @@ public class SwayingUI : MonoBehaviour
 				.Chain(Tween.LocalRotation(transform, positiveRotation, halfDuration, _rotationEase))
 				.Chain(Tween.LocalRotation(transform, negativeRotation, halfDuration, _rotationEase));
 
-			if (_rotationRandomStart)
+			if (_randomizeStartTime || _rotationRandomStart)
 			{
 				_rotationTween.elapsedTime = Random.Range(0f, _rotationDuration);
 			}
@@ -202,7 +213,7 @@ public class SwayingUI : MonoBehaviour
 				.Chain(Tween.Scale(transform, largeScale, halfDuration, _scaleEase))
 				.Chain(Tween.Scale(transform, smallScale, halfDuration, _scaleEase));
 
-			if (_scaleRandomStart)
+			if (_randomizeStartTime || _scaleRandomStart)
 			{
 				_scaleTween.elapsedTime = Random.Range(0f, _scaleDuration);
 			}

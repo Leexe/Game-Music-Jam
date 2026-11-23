@@ -835,6 +835,7 @@ MonoBehaviour:
   _scaleRandomStart: 0
   _scaleDuration: 5
   _activateOnStart: 1
+  _randomizeStartTime: 1
   _useUnscaledTime: 0
 --- !u!114 &546856649
 MonoBehaviour:
@@ -1545,6 +1546,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7323102519265585744}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Enter
+      objectReference: {fileID: 0}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Door, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3535987371642578693, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4014659282377789896, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1565,6 +1594,26 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4879856034083220975, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4879856034083220975, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6188824931125795095}
+    - target: {fileID: 4879856034083220975, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4879856034083220975, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Enter
+      objectReference: {fileID: 0}
+    - target: {fileID: 4879856034083220975, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Door, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6056073242709618842, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1600,6 +1649,26 @@ PrefabInstance:
     - target: {fileID: 6224065081006200791, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_Color.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184843575027720681, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184843575027720681, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2308805741838900131}
+    - target: {fileID: 7184843575027720681, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184843575027720681, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Enter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184843575027720681, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Door, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7495596700523067316, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: serializationData.Prefab
@@ -2050,8 +2119,8 @@ CanvasGroup:
   m_GameObject: {fileID: 1749301099}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &1749301104
 MonoBehaviour:
@@ -2262,6 +2331,7 @@ MonoBehaviour:
   _scaleRandomStart: 0
   _scaleDuration: 5
   _activateOnStart: 1
+  _randomizeStartTime: 1
   _useUnscaledTime: 0
 --- !u!114 &1902637292
 MonoBehaviour:
@@ -2367,6 +2437,7 @@ MonoBehaviour:
   _scaleRandomStart: 0
   _scaleDuration: 5
   _activateOnStart: 1
+  _randomizeStartTime: 1
   _useUnscaledTime: 0
 --- !u!114 &1953887998
 MonoBehaviour:
@@ -2481,6 +2552,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043574402}
   m_CullTransparentMesh: 1
+--- !u!114 &2308805741838900131 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2308805740850599758, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+  m_PrefabInstance: {fileID: 1199099117}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e628d2bd28c298f4e87def5c6985c0de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!1001 &4618557253171149094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2999,6 +3081,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae9d0bc33b6474aa1e4a2cfca6baff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
+--- !u!114 &6188824931125795095 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6188824932180121082, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+  m_PrefabInstance: {fileID: 1199099117}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e628d2bd28c298f4e87def5c6985c0de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
+--- !u!114 &7323102519265585744 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7323102520395376317, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+  m_PrefabInstance: {fileID: 1199099117}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e628d2bd28c298f4e87def5c6985c0de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Door
 --- !u!224 &8060987540956561540 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8060987541985692777, guid: 3c771511aee506b41aad3865127bc433, type: 3}
