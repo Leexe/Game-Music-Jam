@@ -13,6 +13,12 @@ public class WinScreenUI : MonoBehaviour
 
 	private Tween _fadeInTween;
 
+	private void Awake()
+	{
+		_canvasGroup.interactable = false;
+		_canvasGroup.blocksRaycasts = false;
+	}
+
 	private void OnEnable()
 	{
 		GameManager.Instance.OnWin += FadeInScreen;
