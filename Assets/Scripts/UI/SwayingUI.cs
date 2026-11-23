@@ -95,11 +95,6 @@ public class SwayingUI : MonoBehaviour
 	private float _scaleDuration = 5f;
 
 	/* General Settings */
-
-	[FoldoutGroup("General Settings")]
-	[SerializeField]
-	private bool _activateOnStart = true;
-
 	[FoldoutGroup("General Settings")]
 	[SerializeField]
 	[Tooltip("Start each enabled sway tween at a random point in its cycle.")]
@@ -135,10 +130,17 @@ public class SwayingUI : MonoBehaviour
 		_initialRotation = transform.localEulerAngles;
 		_initialScale = transform.localScale;
 
-		if (_activateOnStart)
-		{
-			StartTween();
-		}
+		StartTween();
+	}
+
+	private void OnEnable()
+	{
+		StartTween();
+	}
+
+	private void OnDisable()
+	{
+		StopTween();
 	}
 
 	[FoldoutGroup("Debug")]
@@ -177,7 +179,8 @@ public class SwayingUI : MonoBehaviour
 
 		if (_randomizeStartTime && _positionTween.isAlive)
 		{
-			float cycleDuration = _positionTweenType == PositionTweenType.Smooth ? 2f * _positionDuration : _positionDuration;
+			float cycleDuration =
+				_positionTweenType == PositionTweenType.Smooth ? 2f * _positionDuration : _positionDuration;
 			_positionTween.elapsedTimeTotal = Random.Range(0f, cycleDuration);
 		}
 
@@ -253,10 +256,5 @@ public class SwayingUI : MonoBehaviour
 		{
 			Tween.Scale(transform, _initialScale, tweenDuration, _scaleEase);
 		}
-	}
-
-	private void OnDisable()
-	{
-		StopTween();
 	}
 }
