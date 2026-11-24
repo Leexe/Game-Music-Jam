@@ -115,15 +115,11 @@ public class SwayingUI : MonoBehaviour
 	private Vector3 _initialRotation;
 	private Vector3 _initialScale;
 
-	private void Awake()
-	{
-		_rectTransform = GetComponent<RectTransform>();
-	}
-
 	private void Start()
 	{
 		Canvas.ForceUpdateCanvases();
 
+		_rectTransform = GetComponent<RectTransform>();
 		_initialRectPosition = _rectTransform.anchoredPosition;
 		_initialLocalPosition = transform.localPosition;
 		_endPosition = _initialRectPosition + (Vector2)_positionStrength;
@@ -147,6 +143,12 @@ public class SwayingUI : MonoBehaviour
 	[Button]
 	public void StartTween()
 	{
+		// The first OnEnable runs before Start captures the laid-out pose.
+		if (_rectTransform == null)
+		{
+			return;
+		}
+
 		StopTween();
 
 		if (_positionTweenType == PositionTweenType.Shake)
@@ -236,6 +238,11 @@ public class SwayingUI : MonoBehaviour
 	[Button]
 	public void TweenBackToDefault(float tweenDuration = 1f)
 	{
+		if (_rectTransform == null)
+		{
+			return;
+		}
+
 		StopTween();
 
 		if (_positionTweenType == PositionTweenType.Shake)
