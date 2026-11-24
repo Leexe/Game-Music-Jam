@@ -626,6 +626,18 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 3727721769289655186, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -974,7 +986,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 56.7}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: -280.2}
+  m_AnchoredPosition: {x: -25, y: -322}
   m_SizeDelta: {x: 299.3, y: 364.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &464676677
@@ -1255,7 +1267,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 52}
+  m_AnchoredPosition: {x: 0, y: 50.1}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &546856648
@@ -1271,7 +1283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwayingUI
   _positionTweenType: 2
-  _positionStrength: {x: 0, y: 8, z: 0}
+  _positionStrength: {x: 0, y: 10, z: 0}
   _positionFrequency: 0.5
   _positionEase: 4
   _positionDuration: 2
@@ -1285,7 +1297,7 @@ MonoBehaviour:
   _scaleEase: 4
   _scaleRandomStart: 0
   _scaleDuration: 5
-  _randomizeStartTime: 1
+  _randomizeStartTime: 0
   _useUnscaledTime: 0
 --- !u!114 &546856649
 MonoBehaviour:
@@ -1641,6 +1653,18 @@ PrefabInstance:
     - target: {fileID: 2642456528335044925, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_SortingOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 3727721769289655186, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_IsActive
@@ -2165,13 +2189,21 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 78124180235290973, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 78124180235290973, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 699406588003620281, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -145.10002
+      value: -130
       objectReference: {fileID: 0}
     - target: {fileID: 699406588003620281, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 72.549995
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 1540363653379254204, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_Sprite
@@ -2472,6 +2504,10 @@ PrefabInstance:
     - target: {fileID: 8060987541985692777, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8393971934249180119, guid: 3c771511aee506b41aad3865127bc433, type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8468611077349945281, guid: 3c771511aee506b41aad3865127bc433, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3149,7 +3185,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 84}
+  m_AnchoredPosition: {x: 0, y: 86}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1902637291
@@ -3165,7 +3201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwayingUI
   _positionTweenType: 2
-  _positionStrength: {x: 0, y: 8, z: 0}
+  _positionStrength: {x: 0, y: 10, z: 0}
   _positionFrequency: 0.5
   _positionEase: 4
   _positionDuration: 2.5
@@ -3179,7 +3215,7 @@ MonoBehaviour:
   _scaleEase: 4
   _scaleRandomStart: 0
   _scaleDuration: 5
-  _randomizeStartTime: 1
+  _randomizeStartTime: 0
   _useUnscaledTime: 0
 --- !u!114 &1902637292
 MonoBehaviour:
@@ -3254,7 +3290,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -30.000002, y: 0}
+  m_AnchoredPosition: {x: 13.5, y: 0}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1953887997
@@ -3270,7 +3306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwayingUI
   _positionTweenType: 2
-  _positionStrength: {x: -8, y: 0, z: 0}
+  _positionStrength: {x: -12, y: 0, z: 0}
   _positionFrequency: 0.5
   _positionEase: 4
   _positionDuration: 2.5
@@ -3284,7 +3320,7 @@ MonoBehaviour:
   _scaleEase: 4
   _scaleRandomStart: 0
   _scaleDuration: 5
-  _randomizeStartTime: 1
+  _randomizeStartTime: 0
   _useUnscaledTime: 0
 --- !u!114 &1953887998
 MonoBehaviour:
@@ -3615,11 +3651,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2642456528335044925, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_RenderMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2642456528335044925, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_SortingOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2946467293517061578, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     - target: {fileID: 2961972573059031120, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_SizeDelta.x
