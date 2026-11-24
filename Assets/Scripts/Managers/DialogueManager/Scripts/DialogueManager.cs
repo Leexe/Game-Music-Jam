@@ -175,7 +175,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// <summary>
 	/// Broadcasts a standalone line. Each display manages its own lifetime.
 	/// </summary>
-	public bool TryShowLine(string text, string speaker = "")
+	public bool DisplayLoneLine(string text, string speaker = "")
 	{
 		if (string.IsNullOrWhiteSpace(text) || !isActiveAndEnabled || _storyPlaying)
 		{

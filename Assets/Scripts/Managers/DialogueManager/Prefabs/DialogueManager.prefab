@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
   _typewriter: {fileID: 5793672468084525755}
   _canvasGroup: {fileID: 1319483819390014763}
-  _isPrimary: 1
+  _isHidden: 1
   _standaloneDismissDelay: 3
   _standaloneFadeDuration: 0.25
 --- !u!225 &1319483819390014763
@@ -2405,7 +2405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TextShowUI
   _typewriter: {fileID: 1186690133704978293}
   _canvasGroup: {fileID: 1663501452579647570}
-  _isPrimary: 0
+  _isHidden: 0
   _standaloneDismissDelay: 3
   _standaloneFadeDuration: 0.25
 --- !u!225 &1663501452579647570
