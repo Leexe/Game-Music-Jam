@@ -13,6 +13,10 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	[SerializeField]
 	private RectTransform _imageRectTransform;
 
+	[Tooltip("Optional child point to hold by. Uses _rectTransform if null.")]
+	[SerializeField]
+	private RectTransform _grabPoint;
+
 	[SerializeField]
 	private TextMeshProUGUI _itemName;
 
@@ -32,12 +36,18 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	[SerializeField]
 	private float _shakeDuration = 0.3f;
 
+	[SerializeField, Min(0.1f)]
+	private float _followSpeed = 20f;
+
 	[HideInInspector]
 	public InventorySlotUI InventorySlot;
 	public bool IsInteractable { get; private set; } = true;
 
 	private Canvas _rootCanvas;
 	private Sequence _shakeTween;
+	private bool _isDragging;
+	private Vector2 _pointerScreenPos;
+	private Camera _eventCamera;
 
 	private void Reset()
 	{
@@ -52,6 +62,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		{
 			_itemName.text = _itemData.name;
 		}
+	}
+
+	private void OnDisable()
+	{
+		_isDragging = false;
 	}
 
 	private void OnCanvasHierarchyChanged()
@@ -83,6 +98,9 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			_rectTransform.SetAsLastSibling();
 		}
 
+		_isDragging = true;
+		_pointerScreenPos = eventData.position;
+		_eventCamera = eventData.pressEventCamera;
 		_canvasGroup.alpha = _dragOpacity;
 		_canvasGroup.blocksRaycasts = false;
 		ShakeItem();
@@ -95,11 +113,12 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			return;
 		}
 
-		_rectTransform.anchoredPosition += eventData.delta;
+		_pointerScreenPos = eventData.position;
 	}
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
+		_isDragging = false;
 		if (InventorySlot)
 		{
 			InventorySlot.RealignItem();
@@ -107,6 +126,29 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 		_canvasGroup.alpha = 1f;
 		_canvasGroup.blocksRaycasts = true;
+	}
+
+	private void Update()
+	{
+		if (!_isDragging)
+		{
+			return;
+		}
+
+		RectTransform parent = (RectTransform)_rectTransform.parent;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(
+			parent,
+			_pointerScreenPos,
+			_eventCamera,
+			out Vector2 mouseLocal
+		);
+
+		RectTransform handle = _grabPoint ? _grabPoint : _rectTransform;
+		Vector2 handleLocal = parent.InverseTransformPoint(handle.position);
+		Vector2 desiredAnchoredPos = _rectTransform.anchoredPosition + (mouseLocal - handleLocal);
+
+		float t = 1f - Mathf.Exp(-_followSpeed * Time.unscaledDeltaTime);
+		_rectTransform.anchoredPosition = Vector2.Lerp(_rectTransform.anchoredPosition, desiredAnchoredPos, t);
 	}
 
 	public void SetInventorySlot(InventorySlotUI inventorySlot)
