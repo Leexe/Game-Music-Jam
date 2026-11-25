@@ -51,7 +51,7 @@ Shader "UI/Dialogue Gradient"
                 float4 position : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float2 canvasPosition : TEXCOORD1;
-                half alpha : TEXCOORD2;
+                half4 color : TEXCOORD2;
             };
 
             Varyings vert(appdata_full input)
@@ -60,7 +60,7 @@ Shader "UI/Dialogue Gradient"
                 output.position = UnityObjectToClipPos(input.vertex);
                 output.canvasPosition = input.vertex.xy;
                 output.uv = input.texcoord.xy;
-                output.alpha = input.color.a;
+                output.color = input.color;
                 return output;
             }
 
@@ -68,14 +68,14 @@ Shader "UI/Dialogue Gradient"
             {
                 float fadeStart = min(_BottomThreshold, _FadeHeight - 0.0001);
                 half fade = 1.0h - smoothstep(fadeStart, _FadeHeight, input.uv.y);
-                half alpha = fade * input.alpha * tex2D(_MainTex, input.uv).a;
+                half alpha = fade * input.color.a * tex2D(_MainTex, input.uv).a;
                 #ifdef UNITY_UI_CLIP_RECT
                     alpha *= UnityGet2DClipping(input.canvasPosition, _ClipRect);
                 #endif
                 #ifdef UNITY_UI_ALPHACLIP
                     clip(alpha - 0.001h);
                 #endif
-                return half4(0, 0, 0, alpha);
+                return half4(input.color.rgb, alpha);
             }
             ENDCG
         }
