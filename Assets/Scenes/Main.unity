@@ -2298,6 +2298,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 405645433436728489, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2443083301407163459, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2338,6 +2342,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3009886821288927354, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_text
+      value: Notes
+      objectReference: {fileID: 0}
     - target: {fileID: 3226034385964264383, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2356,7 +2364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3727721769289655186, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4986762231043029758, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2466,6 +2474,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5574236931793934682, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5706219348948440575, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2510,9 +2522,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6986828135700204044, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7314549953505992391, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: _grabPoint
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7314549953505992391, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: _releaseDrag
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7387711495537007015, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_AnchorMax.y
