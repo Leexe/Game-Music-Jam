@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ink.Runtime;
+using Ink.UnityIntegration;
 using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,6 +15,10 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	[FoldoutGroup("References")]
 	[SerializeField]
 	private TextAsset _inkJson;
+
+	[FoldoutGroup("References")]
+	[SerializeField]
+	private InkFile _inkStory;
 
 	[FoldoutGroup("Transition Times")]
 	[SerializeField]
@@ -33,6 +38,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// </summary>
 	public DialogueState DialogueState { get; } = new();
 
+	public bool IsStoryPlaying => _storyPlaying;
+	public string CurrentStoryText => _story != null ? _story.currentText : string.Empty;
+
 	private bool ChoicesAvailable => _story.currentChoices.Count > 0;
 
 	#region Events
@@ -51,12 +59,13 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		// Prevent continuing if paused
 		DialogueState.AddBlockingCondition(() => Time.timeScale == 0f);
 
-		if (!_inkJson)
+		string storyJson = _inkStory ? _inkStory.storyJson : (_inkJson ? _inkJson.text : null);
+		if (string.IsNullOrEmpty(storyJson))
 		{
 			return;
 		}
 
-		_story = new Story(_inkJson.text);
+		_story = new Story(storyJson);
 		InitializeTagHandlers();
 
 		// Bind External Functions
@@ -231,7 +240,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// <summary>
 	///     Advances the story to the next line or handles player interaction.
 	/// </summary>
-	private void ContinueStory()
+	public void ContinueStory()
 	{
 		// Check global blocking conditions (Pause, Backlog, etc.)
 		if (!DialogueState.CanAdvanceStory)
@@ -266,12 +275,6 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
 			// Signal start of new dialogue line
 			DialogueState.StartDialogue();
-
-			// Parse any tags on this line
-			if (_story.currentTags.Count > 0)
-			{
-				ParseTags(_story.currentTags);
-			}
 
 			DisplayLine();
 		}
@@ -313,27 +316,26 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private void DisplayLine()
 	{
 		string storyLine = _story.currentText;
-
-		// Skip blank lines
-		while (IsLineBlank(storyLine) && _story.canContinue)
+		ParseTags(_story.currentTags);
+		while (string.IsNullOrWhiteSpace(storyLine) && _story.canContinue)
 		{
 			storyLine = _story.Continue();
+			ParseTags(_story.currentTags);
+		}
 
-			while (IsLineBlank(storyLine) && _story.canContinue)
+		_needToDisplayChoices = ChoicesAvailable;
+		if (string.IsNullOrWhiteSpace(storyLine))
+		{
+			_typewriterPlaying = false;
+			if (ChoicesAvailable)
 			{
-				storyLine = _story.Continue();
+				DisplayChoices();
 			}
-
-			if (IsLineBlank(storyLine) && !_story.canContinue)
+			else
 			{
 				ExitStory();
 			}
-		}
-
-		// Flag choices for display after typewriter finishes
-		if (ChoicesAvailable)
-		{
-			_needToDisplayChoices = true;
+			return;
 		}
 
 		DialogueState.DisplayDialogue(_currentSpeakerName, storyLine);
@@ -362,42 +364,40 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		_typewriterPlaying = false;
 	}
 
-	/// <summary>
-	///     Checks if a line of text is blank or only whitespace.
-	/// </summary>
-	/// <param name="line">The line to check.</param>
-	/// <returns>True if the line is blank, false otherwise.</returns>
-	private bool IsLineBlank(string line)
-	{
-		return line.Trim().Equals("") || line.Trim().Equals("\n");
-	}
-
 	#endregion
 
 	#region Tag Parsing
 
-	private Dictionary<string, Action<string[]>> _tagHandlers;
+	private readonly Dictionary<string, Action<string[]>> _tagHandlers = new();
 
 	/// <summary>
-	///     Initializes the tag handler dictionary with all supported tag types.
+	///     Registers a custom Ink tag handler for the given identifier (e.g. "call" for #call_Laila).
+	/// </summary>
+	public void RegisterTagHandler(string identifier, Action<string[]> handler) =>
+		_tagHandlers[identifier.ToLower()] = handler;
+
+	/// <summary>
+	///     Unregisters a custom Ink tag handler.
+	/// </summary>
+	public void UnregisterTagHandler(string identifier) => _tagHandlers.Remove(identifier.ToLower());
+
+	/// <summary>
+	///     Initializes the tag handler dictionary with all built-in tag types.
 	///     Called in Awake after story initialization.
 	/// </summary>
 	private void InitializeTagHandlers()
 	{
-		_tagHandlers = new Dictionary<string, Action<string[]>>
-		{
-			{ "ch", HandleCharacterTag },
-			{ "chl", args => HandlePositionedCharacterTag(args, CharacterPosition.Left) },
-			{ "chc", args => HandlePositionedCharacterTag(args, CharacterPosition.Center) },
-			{ "chr", args => HandlePositionedCharacterTag(args, CharacterPosition.Right) },
-			{ "an", HandleAnimationTag },
-			{ "nm", HandleNameTag },
-			{ "d", HandleDialogueVoiceTag },
-			{ "bg", HandleBackgroundTag },
-			{ "sfx", HandleSFXTag },
-			{ "ms", HandleMusicTag },
-			{ "ab", HandleAmbienceTag },
-		};
+		_tagHandlers["ch"] = HandleCharacterTag;
+		_tagHandlers["chl"] = args => HandlePositionedCharacterTag(args, CharacterPosition.Left);
+		_tagHandlers["chc"] = args => HandlePositionedCharacterTag(args, CharacterPosition.Center);
+		_tagHandlers["chr"] = args => HandlePositionedCharacterTag(args, CharacterPosition.Right);
+		_tagHandlers["an"] = HandleAnimationTag;
+		_tagHandlers["nm"] = HandleNameTag;
+		_tagHandlers["d"] = HandleDialogueVoiceTag;
+		_tagHandlers["bg"] = HandleBackgroundTag;
+		_tagHandlers["sfx"] = HandleSFXTag;
+		_tagHandlers["ms"] = HandleMusicTag;
+		_tagHandlers["ab"] = HandleAmbienceTag;
 	}
 
 	/// <summary>

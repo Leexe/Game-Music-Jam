@@ -4,15 +4,14 @@ using UnityEngine;
 public class DialogueChoicesController : MonoBehaviour
 {
 	[SerializeField]
-	private DialogueManager _dialogueManager;
-
-	[SerializeField]
 	private GameObject _dialogueBoxPrefab;
 
+	private DialogueManager _dialogueManager;
 	private readonly List<DialogueChoiceBox> _choiceBoxes = new();
 
 	private void OnEnable()
 	{
+		_dialogueManager = DialogueManager.Instance;
 		_dialogueManager.DialogueState.OnDisplayChoices += DisplayChoices;
 		_dialogueManager.DialogueState.OnChoiceSelect += HideChoices;
 		_dialogueManager.DialogueState.OnStartStory += HideChoices;

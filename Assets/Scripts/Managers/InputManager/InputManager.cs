@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using TMPro;
 
 public class InputManager : PersistentMonoSingleton<InputManager>
 {
@@ -110,13 +112,19 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 	/** Update Methods **/
 	private void Update()
 	{
-		if (!InputActions)
+		if (!InputActions || IsEditingText())
 		{
 			return;
 		}
 
 		UpdateContinuousInputs();
 		CheckAnyInput();
+	}
+
+	private static bool IsEditingText()
+	{
+		var selected = EventSystem.current ? EventSystem.current.currentSelectedGameObject : null;
+		return selected && selected.TryGetComponent<TMP_InputField>(out var field) && field.isFocused;
 	}
 
 	private void UpdateContinuousInputs()
@@ -226,7 +234,13 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 			_action.canceled -= OnCanceled;
 		}
 
-		private void OnPerformed(InputAction.CallbackContext context) => _performedEvent?.Invoke();
+		private void OnPerformed(InputAction.CallbackContext context)
+		{
+			if (!IsEditingText())
+			{
+				_performedEvent?.Invoke();
+			}
+		}
 
 		private void OnCanceled(InputAction.CallbackContext context) => _canceledEvent?.Invoke();
 	}

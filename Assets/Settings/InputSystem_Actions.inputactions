@@ -321,6 +321,17 @@
                 },
                 {
                     "name": "",
+                    "id": "b1d5e9f4-4c6c-4a3a-9d8f-3f8d7c6a1201",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ContinueStory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "0a53f7de-ab23-4713-b514-5846f83b5613",
                     "path": "<Keyboard>/b",
                     "interactions": "",
