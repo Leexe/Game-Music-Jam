@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,7 +7,7 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 	private const float MaxDeltaTime = 0.05f;
 	private const float StopVelocityThresholdSqr = 0.01f;
 
-	[Header("References")]
+	[Title("References")]
 	[SerializeField]
 	private RectTransform _target;
 
@@ -18,7 +19,12 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 	[SerializeField]
 	private RectTransform _bounds;
 
-	[Header("Inertia")]
+	[Title("Behavior")]
+	[Tooltip("Moves the target to the top of the UI draw order when grabbed.")]
+	[SerializeField]
+	private bool _bringToFront = true;
+
+	[Title("Inertia")]
 	[SerializeField, Min(1f)]
 	private float _stiffness = 300f;
 
@@ -85,7 +91,11 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 		_isDragging = true;
 		_pointerScreenPos = eventData.position;
 		_eventCamera = eventData.pressEventCamera;
-		_target.SetAsLastSibling();
+
+		if (_bringToFront)
+		{
+			_target.SetAsLastSibling();
+		}
 
 		if (!_grabPoint)
 		{
