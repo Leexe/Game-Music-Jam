@@ -4,6 +4,7 @@ using Febucci.TextAnimatorForUnity;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 [RequireComponent(typeof(TypewriterComponent))]
@@ -45,6 +46,8 @@ public class TextShowUI : MonoBehaviour
 	private DialogueState _state;
 	private bool _isStandaloneLine;
 	private bool _isFadingOut;
+	private string _currentStandaloneLine;
+	private string _currentStandaloneSpeaker;
 	private Sequence _showSequence;
 	private Sequence _dismissSequence;
 
@@ -74,6 +77,19 @@ public class TextShowUI : MonoBehaviour
 		ClearLine();
 	}
 
+	private void Update()
+	{
+		if (
+			_isStandaloneLine
+			&& _state.CanAdvanceStory
+			&& Mouse.current != null
+			&& Mouse.current.leftButton.wasPressedThisFrame
+		)
+		{
+			ContinueStandaloneLine();
+		}
+	}
+
 	private void OnDisable()
 	{
 		StopActiveSequences();
@@ -91,12 +107,27 @@ public class TextShowUI : MonoBehaviour
 
 	private void ShowLine(string speaker, string line)
 	{
+		if (_isStandaloneLine && _currentStandaloneLine == line && _currentStandaloneSpeaker == speaker)
+		{
+			if (!_isFadingOut && !_typewriter.IsShowingText)
+			{
+				StandaloneTextShown?.Invoke();
+			}
+			return;
+		}
+
 		StopActiveSequences();
 
-		if (_isStandaloneLine && !_isHidden)
+		if (_isStandaloneLine)
 		{
-			StartStandaloneShow(line);
-			return;
+			_currentStandaloneLine = line;
+			_currentStandaloneSpeaker = speaker;
+
+			if (!_isHidden)
+			{
+				StartStandaloneShow(line);
+				return;
+			}
 		}
 
 		SetCanvasGroups(1f, true);
@@ -105,8 +136,15 @@ public class TextShowUI : MonoBehaviour
 
 	private void HandleDialogueStarted(string knotName)
 	{
-		StopActiveSequences();
-		_isStandaloneLine = knotName == null;
+		if (knotName != null)
+		{
+			StopActiveSequences();
+			ClearStandaloneTracking();
+			_isStandaloneLine = false;
+			return;
+		}
+
+		_isStandaloneLine = true;
 	}
 
 	private void ContinueStandaloneLine()
@@ -137,14 +175,7 @@ public class TextShowUI : MonoBehaviour
 	{
 		if (_isStandaloneLine)
 		{
-			if (_textCanvasGroup)
-			{
-				_textCanvasGroup.blocksRaycasts = false;
-			}
-
-			StartFadeOut(view => view.FinishStandaloneLine(), _standaloneDismissDelay);
-			_dismissSequence.isPaused = !_state.CanAdvanceStory;
-			StandaloneTextShown?.Invoke();
+			StartStandaloneDismiss();
 		}
 		else if (_isHidden)
 		{
@@ -180,9 +211,19 @@ public class TextShowUI : MonoBehaviour
 		SetTextCanvasGroup(0f, true);
 
 		_showSequence = Sequence.Create();
-		ChainFade(_showSequence, _fadeCanvasGroup, 1f, _standaloneBgFadeDuration);
+		if (_fadeCanvasGroup && _fadeCanvasGroup.alpha < 1f)
+		{
+			ChainFade(_showSequence, _fadeCanvasGroup, 1f, _standaloneBgFadeDuration);
+		}
 		_showSequence.ChainCallback(() => _typewriter.ShowText(line));
 		ChainFade(_showSequence, _textCanvasGroup, 1f, _standaloneTextFadeDuration);
+	}
+
+	private void StartStandaloneDismiss()
+	{
+		StartFadeOut(view => view.FinishStandaloneLine(), _standaloneDismissDelay);
+		_dismissSequence.isPaused = !_state.CanAdvanceStory;
+		StandaloneTextShown?.Invoke();
 	}
 
 	private void StartFadeOut(Action<TextShowUI> onComplete, float delay = 0f)
@@ -197,21 +238,17 @@ public class TextShowUI : MonoBehaviour
 
 		if (!_isHidden)
 		{
-			_dismissSequence.ChainCallback(this, view => view.BeginFadeOut());
+			if (_textCanvasGroup)
+			{
+				_textCanvasGroup.blocksRaycasts = false;
+			}
+
+			_dismissSequence.ChainCallback(this, view => view._isFadingOut = true);
 			ChainFade(_dismissSequence, _textCanvasGroup, 0f, _standaloneTextFadeDuration);
 			ChainFade(_dismissSequence, _fadeCanvasGroup, 0f, _standaloneBgFadeDuration);
 		}
 
 		_dismissSequence.OnComplete(this, onComplete);
-	}
-
-	private void BeginFadeOut()
-	{
-		_isFadingOut = true;
-		if (_textCanvasGroup)
-		{
-			_textCanvasGroup.blocksRaycasts = false;
-		}
 	}
 
 	private static void ChainFade(Sequence sequence, CanvasGroup group, float targetAlpha, float duration)
@@ -232,9 +269,16 @@ public class TextShowUI : MonoBehaviour
 	private void ClearLine()
 	{
 		StopActiveSequences();
+		ClearStandaloneTracking();
 		_typewriter.StopShowingText();
 		_typewriter.TextAnimator.SetText(string.Empty);
 		SetCanvasGroups(0f, false);
+	}
+
+	private void ClearStandaloneTracking()
+	{
+		_currentStandaloneLine = null;
+		_currentStandaloneSpeaker = null;
 	}
 
 	private void SetCanvasGroups(float alpha, bool blocksRaycasts)
