@@ -34,7 +34,7 @@ public class CameraItem : MonoBehaviour
 	private void Update()
 	{
 		Mouse mouse = Mouse.current;
-		if (mouse == null)
+		if (mouse == null || Time.timeScale == 0f)
 		{
 			return;
 		}
