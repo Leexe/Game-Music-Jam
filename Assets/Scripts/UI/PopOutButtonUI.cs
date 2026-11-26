@@ -27,7 +27,7 @@ public class PopOutButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	[Tooltip("Minimum scale during oscillation, should be less than max size")]
 	[SerializeField]
 	[ShowIf("_enableOscillation")]
-	private float _minOscillateSize = 1.05f;
+	private float _minOscillateSize = 0.95f;
 
 	[Tooltip("Duration of one oscillation cycle in seconds")]
 	[SerializeField]
@@ -66,7 +66,10 @@ public class PopOutButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 		_oscillateSequence.Stop();
 
 		Vector3 maxScale = _originalScale * _maxSize;
-		AudioManager.Instance.PlayOneShot(_hoverSound);
+		if (!_hoverSound.IsNull)
+		{
+			AudioManager.Instance.PlayOneShot(_hoverSound);
+		}
 
 		_scaleTween = Tween
 			.Scale(transform, maxScale, _tweenDuration, _ease, useUnscaledTime: _useUnscaledTime)

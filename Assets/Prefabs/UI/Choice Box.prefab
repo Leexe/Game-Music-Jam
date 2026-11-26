@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 559504780196318274}
   - component: {fileID: 8547777019984240287}
   - component: {fileID: 2448037467692402237}
+  - component: {fileID: 7901853134035717585}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -97,13 +98,13 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 0
+  m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.23529412, g: 0.21176471, b: 0.2, a: 1}
-    m_HighlightedColor: {r: 0.37254903, g: 0.3254902, b: 0.2901961, a: 1}
-    m_PressedColor: {r: 0.19215687, g: 0.17254902, b: 0.16470589, a: 1}
-    m_SelectedColor: {r: 0.37254903, g: 0.3254902, b: 0.2901961, a: 1}
-    m_DisabledColor: {r: 0.45882353, g: 0.36862746, b: 0.29411766, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -162,6 +163,32 @@ MonoBehaviour:
   _scaleRandomStart: 0
   _scaleDuration: 5
   _randomizeStartTime: 0
+  _useUnscaledTime: 0
+--- !u!114 &7901853134035717585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3011416551973456458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8a556caa151c4d52b02319d01288c3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopOutButtonUI
+  _maxSize: 1.05
+  _tweenDuration: 0.2
+  _ease: 27
+  _enableOscillation: 1
+  _minOscillateSize: 1.025
+  _oscillateDuration: 2
+  _hoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _useUnscaledTime: 0
 --- !u!1 &4933043319848642686
 GameObject:
