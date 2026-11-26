@@ -179,7 +179,7 @@ MonoBehaviour:
   _maxSize: 1.05
   _tweenDuration: 0.2
   _ease: 27
-  _enableOscillation: 1
+  _enableOscillation: 0
   _minOscillateSize: 1.025
   _oscillateDuration: 2
   _hoverSound:
