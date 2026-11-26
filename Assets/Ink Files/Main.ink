@@ -29,16 +29,16 @@ Beginning of Lawyer Interview
 
 PROTAG: What do you know about... #call_Naismith
 
-* ...the missing car? #call_Naismith
++ ...the missing car? #call_Naismith
 -> LAWYER_CAR
   
-* ...the safe? #call_Naismith
++ ...the safe? #call_Naismith
  -> LAWYER_SAFE
 
-* ...the knife? #call_Naismith
++ ...the knife? #call_Naismith
   -> LAWYER_KNIFE
 
-* ...her appointment with you? #call_Naismith
++ ...her appointment with you? #call_Naismith
   -> LAWYER_APPT
 
 + You know what, nevermind. Thanks for all your help. #call_Naismith
@@ -70,16 +70,16 @@ Beginning of assistant interview
 === asst_interview === 
 
 PROTAG: What do you know about... #call_Laila
-* ...Lumina's appointment with her lawyer? #call_Laila
++ ...Lumina's appointment with her lawyer? #call_Laila
 -> asst_appt 
 
-* The missing car? #call_Laila
++ The missing car? #call_Laila
 -> asst_car 
 
-* The safe? #call_Laila
++ The safe? #call_Laila
 -> asst_safe
 
-* the knife? #call_Laila
++ the knife? #call_Laila
 -> asst_knife
 
 + You know what, nevermind. Thanks for all your help. #call_Laila
@@ -131,16 +131,16 @@ PROTAG: Hello, Mr. Ackleman. #call_Mitch
 === driver_interview === 
 PROTAG: What do you know about... #call_Mitch
 
-* ...the missing car? #call_Mitch
++ ...the missing car? #call_Mitch
 -> dr_car
   
-* ...the safe? #call_Mitch
++ ...the safe? #call_Mitch
  -> dr_safe
 
-* ...the knife? #call_Mitch
++ ...the knife? #call_Mitch
   -> dr_knife
 
-* ...her appointment with her lawyer? #call_Mitch
++ ...her appointment with her lawyer? #call_Mitch
   -> dr_appt
 
 + You know what, nevermind. Thanks for all your help. #call_Mitch
@@ -183,11 +183,11 @@ Convince the chief to arrest someone
 PROTAG: Hi, Chief. I think I found our suspect. #call_Chief
 CHIEF: Lay it out for me. #call_Chief
 PROTAG: I think it's the... #call_Chief
-* The lawyer. #call_Chief
++ The lawyer. #call_Chief
 -> law_ev
-* The assistant. #call_Chief
++ The assistant. #call_Chief
 -> asst_ev
-* The chauffeur. #call_Chief
++ The chauffeur. #call_Chief
 -> dr_ev
 
 === law_ev ===
