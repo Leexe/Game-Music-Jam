@@ -138,7 +138,7 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 	public bool IsDockedAbove(RectTransform bar)
 	{
 		const float tolerance = 1f;
-		return GetDockOffset(bar).sqrMagnitude <= tolerance * tolerance;
+		return Mathf.Abs(GetDockOffset(bar).y) <= tolerance;
 	}
 
 	public void PlaceAboveBar(RectTransform bar)
