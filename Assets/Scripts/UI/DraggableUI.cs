@@ -135,7 +135,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 			return;
 		}
 
-		RectTransform parent = (RectTransform)_rectTransform.parent;
+		var parent = (RectTransform)_rectTransform.parent;
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(
 			parent,
 			_pointerScreenPos,

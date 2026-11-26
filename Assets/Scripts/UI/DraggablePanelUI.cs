@@ -1,3 +1,4 @@
+using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,6 +40,7 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 	private float _boundaryBounce = 0.4f;
 
 	private bool _isDragging;
+	private Tween _dockTween;
 	private Vector2 _pointerScreenPos;
 	private Camera _eventCamera;
 	private Vector2 _velocity;
@@ -56,6 +58,7 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 
 	private void OnDisable()
 	{
+		StopDocking();
 		_isDragging = false;
 		_velocity = Vector2.zero;
 	}
@@ -88,6 +91,7 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 			return;
 		}
 
+		StopDocking();
 		_isDragging = true;
 		_pointerScreenPos = eventData.position;
 		_eventCamera = eventData.pressEventCamera;
@@ -123,6 +127,39 @@ public class DraggablePanelUI : MonoBehaviour, IPointerDownHandler, IDragHandler
 	#endregion
 
 	#region Inertia & Clamping
+
+	private Vector2 GetDockOffset(RectTransform bar)
+	{
+		GetHitboxLocalBounds(bar, out Vector2 handleMin, out _);
+		Vector2 dockCorner = new(bar.rect.xMin, bar.rect.yMax);
+		return dockCorner - handleMin;
+	}
+
+	public bool IsDockedAbove(RectTransform bar)
+	{
+		const float tolerance = 1f;
+		return GetDockOffset(bar).sqrMagnitude <= tolerance * tolerance;
+	}
+
+	public void PlaceAboveBar(RectTransform bar)
+	{
+		Vector3 destination = _target.position + bar.TransformVector(GetDockOffset(bar));
+		MoveToPosition(destination, 0.35f, Ease.OutCubic, true);
+		_dockTween.OnComplete(this, static panel => panel.ClampToBounds());
+	}
+
+	public void MoveToPosition(Vector3 destination, float duration, Ease ease, bool useUnscaledTime)
+	{
+		StopDocking();
+		_isDragging = false;
+		_velocity = Vector2.zero;
+		_dockTween = Tween.Position(_target, destination, duration, ease, useUnscaledTime: useUnscaledTime);
+	}
+
+	public void StopDocking()
+	{
+		_dockTween.Stop();
+	}
 
 	private void UpdateDragVelocity(float dt)
 	{

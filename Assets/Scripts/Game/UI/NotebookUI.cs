@@ -28,6 +28,13 @@ public class NotebookUI : MonoBehaviour
 	[SerializeField, Min(0)]
 	private int _defaultTabIndex;
 
+	[Title("Docking")]
+	[SerializeField]
+	private RectTransform _bottomBar;
+
+	[SerializeField]
+	private DraggablePanelUI _dragHandle;
+
 	[Title("Interview")]
 	[SerializeField]
 	private RectTransform _interviewPosition;
@@ -61,7 +68,6 @@ public class NotebookUI : MonoBehaviour
 	private UnityAction[] _tabHandlers;
 	private Sequence _fadeOutSequence;
 	private Tween _fadeInTween;
-	private Tween _moveTween;
 	private int _activeTabIndex = -1;
 	private string _lastContact;
 	private bool _scrollToBottomPending;
@@ -109,7 +115,7 @@ public class NotebookUI : MonoBehaviour
 
 		_fadeOutSequence.Stop();
 		_fadeInTween.Stop();
-		_moveTween.Stop();
+		_dragHandle.StopDocking();
 		if (_activeTabIndex >= 0)
 		{
 			SetAllPagesImmediate(_activeTabIndex);
@@ -202,16 +208,21 @@ public class NotebookUI : MonoBehaviour
 		}
 	}
 
+	public void DockAboveBottomBar()
+	{
+		gameObject.SetActive(true);
+		if (_dragHandle.IsDockedAbove(_bottomBar))
+		{
+			_dragHandle.MoveToPosition(_interviewPosition.position, _moveDuration, _moveEase, _useUnscaledTime);
+			return;
+		}
+
+		_dragHandle.PlaceAboveBar(_bottomBar);
+	}
+
 	public void MoveToInterviewPosition()
 	{
-		_moveTween.Stop();
-		_moveTween = Tween.Position(
-			transform,
-			_interviewPosition.position,
-			_moveDuration,
-			_moveEase,
-			useUnscaledTime: _useUnscaledTime
-		);
+		_dragHandle.MoveToPosition(_interviewPosition.position, _moveDuration, _moveEase, _useUnscaledTime);
 
 		for (int i = 0; i < _tabs.Length; i++)
 		{

@@ -3207,6 +3207,8 @@ MonoBehaviour:
     CanvasGroup: {fileID: 1900000000000000021}
     InputField: {fileID: 602743985606904645}
   _defaultTabIndex: 0
+  _bottomBar: {fileID: 5252083083123237619}
+  _dragHandle: {fileID: 7314549953505992391}
   _interviewPosition: {fileID: 44985395143690092}
   _moveDuration: 0.35
   _moveEase: 9
@@ -5112,10 +5114,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5574236931793934682}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 3678312735160258345}
+        m_TargetAssemblyTypeName: NotebookUI, Assembly-CSharp
+        m_MethodName: DockAboveBottomBar
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
