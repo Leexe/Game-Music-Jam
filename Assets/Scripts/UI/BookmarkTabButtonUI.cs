@@ -10,7 +10,7 @@ public class BookmarkTabButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
 	[SerializeField]
 	private RectTransform _rectTransform;
 
-	[Tooltip("Button used to detect active state (!interactable) when Linked Page is unassigned.")]
+	[Tooltip("Button used to detect active state when Linked Page is unassigned.")]
 	[SerializeField]
 	private Button _button;
 
@@ -81,10 +81,9 @@ public class BookmarkTabButtonUI : MonoBehaviour, IPointerEnterHandler, IPointer
 
 	private void Update()
 	{
-		bool active = IsTabActive;
-		if (active != _isActive)
+		if (IsTabActive != _isActive)
 		{
-			SetTabActive(active);
+			SetTabActive(IsTabActive);
 		}
 	}
 

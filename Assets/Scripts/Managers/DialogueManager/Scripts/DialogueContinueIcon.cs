@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -46,6 +47,7 @@ public class DialogueContinueIcon : MonoBehaviour
 			_textView.StandaloneLineFinished += HideIcon;
 			_dialogueState.OnStartDialogue += HideIcon;
 			_dialogueState.OnDisplayDialogue += HideIcon;
+			_dialogueState.OnDisplayChoices += HideIcon;
 			_dialogueState.OnEndStory += HideIcon;
 		}
 	}
@@ -59,12 +61,15 @@ public class DialogueContinueIcon : MonoBehaviour
 			_textView.StandaloneLineFinished -= HideIcon;
 			_dialogueState.OnStartDialogue -= HideIcon;
 			_dialogueState.OnDisplayDialogue -= HideIcon;
+			_dialogueState.OnDisplayChoices -= HideIcon;
 			_dialogueState.OnEndStory -= HideIcon;
 		}
 		StopAllTweens();
 	}
 
 	private void HideIcon(string speakerName, string text) => HideIcon();
+
+	private void HideIcon(List<string> choices) => HideIcon();
 
 	[Button]
 	public void ShowIcon()

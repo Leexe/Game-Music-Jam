@@ -28,6 +28,16 @@ public class NotebookUI : MonoBehaviour
 	[SerializeField, Min(0)]
 	private int _defaultTabIndex;
 
+	[Title("Interview")]
+	[SerializeField]
+	private RectTransform _interviewPosition;
+
+	[SerializeField, Min(0f)]
+	private float _moveDuration = 0.35f;
+
+	[SerializeField]
+	private Ease _moveEase = Ease.OutCubic;
+
 	[Title("Page Fading")]
 	[SerializeField, Min(0f)]
 	private float _pageFadeDuration = 0.2f;
@@ -51,6 +61,7 @@ public class NotebookUI : MonoBehaviour
 	private UnityAction[] _tabHandlers;
 	private Sequence _fadeOutSequence;
 	private Tween _fadeInTween;
+	private Tween _moveTween;
 	private int _activeTabIndex = -1;
 	private string _lastContact;
 	private bool _scrollToBottomPending;
@@ -68,22 +79,20 @@ public class NotebookUI : MonoBehaviour
 
 	private void Start()
 	{
-		ShowTab(_defaultTabIndex);
-	}
-
-	private void Update()
-	{
-		if (_scrollToBottomPending && _callLogScroll.gameObject.activeInHierarchy)
+		if (_activeTabIndex < 0)
 		{
-			ScrollCallLogToBottom();
+			ShowTab(_defaultTabIndex);
 		}
 	}
 
 	private void OnEnable()
 	{
-		_dialogue = DialogueManager.Instance;
-		_dialogue.RegisterTagHandler(CallTagIdentifier, HandleCallTag);
-		_dialogue.OnDialogueEnded += EndCall;
+		if (!_dialogue)
+		{
+			_dialogue = DialogueManager.Instance;
+			_dialogue.RegisterTagHandler(CallTagIdentifier, HandleCallTag);
+			_dialogue.OnDialogueEnded += EndCall;
+		}
 
 		for (int i = 0; i < _tabs.Length; i++)
 		{
@@ -93,12 +102,6 @@ public class NotebookUI : MonoBehaviour
 
 	private void OnDisable()
 	{
-		if (_dialogue)
-		{
-			_dialogue.UnregisterTagHandler(CallTagIdentifier);
-			_dialogue.OnDialogueEnded -= EndCall;
-		}
-
 		for (int i = 0; i < _tabs.Length; i++)
 		{
 			_tabs[i].Tab.onClick.RemoveListener(_tabHandlers[i]);
@@ -106,9 +109,27 @@ public class NotebookUI : MonoBehaviour
 
 		_fadeOutSequence.Stop();
 		_fadeInTween.Stop();
+		_moveTween.Stop();
 		if (_activeTabIndex >= 0)
 		{
 			SetAllPagesImmediate(_activeTabIndex);
+		}
+	}
+
+	private void OnDestroy()
+	{
+		if (_dialogue)
+		{
+			_dialogue.UnregisterTagHandler(CallTagIdentifier);
+			_dialogue.OnDialogueEnded -= EndCall;
+		}
+	}
+
+	private void Update()
+	{
+		if (_scrollToBottomPending && _callLogScroll.gameObject.activeInHierarchy)
+		{
+			ScrollCallLogToBottom();
 		}
 	}
 
@@ -181,6 +202,27 @@ public class NotebookUI : MonoBehaviour
 		}
 	}
 
+	public void MoveToInterviewPosition()
+	{
+		_moveTween.Stop();
+		_moveTween = Tween.Position(
+			transform,
+			_interviewPosition.position,
+			_moveDuration,
+			_moveEase,
+			useUnscaledTime: _useUnscaledTime
+		);
+
+		for (int i = 0; i < _tabs.Length; i++)
+		{
+			if (_tabs[i].Page == _callLogScroll.gameObject)
+			{
+				ShowTab(i);
+				return;
+			}
+		}
+	}
+
 	private void StartFadeIn(int index)
 	{
 		TabPage tab = _tabs[index];
@@ -188,7 +230,13 @@ public class NotebookUI : MonoBehaviour
 		tab.CanvasGroup.interactable = true;
 		tab.CanvasGroup.blocksRaycasts = true;
 		FocusAndUpdateScroll(index);
-		_fadeInTween = Tween.Alpha(tab.CanvasGroup, 1f, _pageFadeDuration, _pageFadeEase, useUnscaledTime: _useUnscaledTime);
+		_fadeInTween = Tween.Alpha(
+			tab.CanvasGroup,
+			1f,
+			_pageFadeDuration,
+			_pageFadeEase,
+			useUnscaledTime: _useUnscaledTime
+		);
 	}
 
 	private void SetAllPagesImmediate(int activeIndex)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Febucci.TextAnimatorCore;
 using Febucci.TextAnimatorForUnity;
 using PrimeTween;
@@ -20,7 +21,7 @@ public class TextShowUI : MonoBehaviour
 	private CanvasGroup _textCanvasGroup;
 
 	[SerializeField]
-	private CanvasGroup _fadeCanvasGroup;
+	private CanvasGroup[] _fadeCanvasGroups = Array.Empty<CanvasGroup>();
 
 	[Header("Behaviour")]
 	[InfoBox("Only the hidden typewriter reports Ink line completion to the dialogue manager.")]
@@ -68,6 +69,7 @@ public class TextShowUI : MonoBehaviour
 
 			_state.OnDisplayDialogue += ShowLine;
 			_state.OnTypewriterSkip += _typewriter.SkipTypewriter;
+			_state.OnDisplayChoices += HandleDisplayChoices;
 			_state.OnEndStory += HandleEndStory;
 			_dialogueManager.OnStandaloneContinue += ContinueStandaloneLine;
 			_dialogueManager.OnDialogueStarted += HandleDialogueStarted;
@@ -97,6 +99,7 @@ public class TextShowUI : MonoBehaviour
 		{
 			_state.OnDisplayDialogue -= ShowLine;
 			_state.OnTypewriterSkip -= _typewriter.SkipTypewriter;
+			_state.OnDisplayChoices -= HandleDisplayChoices;
 			_state.OnEndStory -= HandleEndStory;
 			_dialogueManager.OnStandaloneContinue -= ContinueStandaloneLine;
 			_dialogueManager.OnDialogueStarted -= HandleDialogueStarted;
@@ -211,10 +214,7 @@ public class TextShowUI : MonoBehaviour
 		SetTextCanvasGroup(0f, true);
 
 		_showSequence = Sequence.Create();
-		if (_fadeCanvasGroup && _fadeCanvasGroup.alpha < 1f)
-		{
-			ChainFade(_showSequence, _fadeCanvasGroup, 1f, _standaloneBgFadeDuration);
-		}
+		AppendParallelFades(_showSequence, _fadeCanvasGroups, 1f, _standaloneBgFadeDuration, skipIfAtTarget: true);
 		_showSequence.ChainCallback(() => _typewriter.ShowText(line));
 		ChainFade(_showSequence, _textCanvasGroup, 1f, _standaloneTextFadeDuration);
 	}
@@ -245,10 +245,39 @@ public class TextShowUI : MonoBehaviour
 
 			_dismissSequence.ChainCallback(this, view => view._isFadingOut = true);
 			ChainFade(_dismissSequence, _textCanvasGroup, 0f, _standaloneTextFadeDuration);
-			ChainFade(_dismissSequence, _fadeCanvasGroup, 0f, _standaloneBgFadeDuration);
+			AppendParallelFades(_dismissSequence, _fadeCanvasGroups, 0f, _standaloneBgFadeDuration);
 		}
 
 		_dismissSequence.OnComplete(this, onComplete);
+	}
+
+	private static void AppendParallelFades(
+		Sequence sequence,
+		CanvasGroup[] groups,
+		float targetAlpha,
+		float duration,
+		bool skipIfAtTarget = false
+	)
+	{
+		bool started = false;
+		foreach (CanvasGroup group in groups)
+		{
+			if (skipIfAtTarget && Mathf.Approximately(group.alpha, targetAlpha))
+			{
+				continue;
+			}
+
+			Tween tween = Tween.Alpha(group, targetAlpha, duration, Ease.Linear);
+			if (!started)
+			{
+				sequence.Chain(tween);
+				started = true;
+			}
+			else
+			{
+				sequence.Group(tween);
+			}
+		}
 	}
 
 	private static void ChainFade(Sequence sequence, CanvasGroup group, float targetAlpha, float duration)
@@ -266,13 +295,24 @@ public class TextShowUI : MonoBehaviour
 		_isFadingOut = false;
 	}
 
+	private void HandleDisplayChoices(List<string> choices)
+	{
+		ClearText();
+	}
+
+	private void ClearText()
+	{
+		_typewriter.StopShowingText();
+		_typewriter.TextAnimator.SetText(string.Empty);
+		SetTextCanvasGroup(0f, false);
+	}
+
 	private void ClearLine()
 	{
 		StopActiveSequences();
 		ClearStandaloneTracking();
-		_typewriter.StopShowingText();
-		_typewriter.TextAnimator.SetText(string.Empty);
-		SetCanvasGroups(0f, false);
+		ClearText();
+		SetBackgroundCanvasGroups(0f);
 	}
 
 	private void ClearStandaloneTracking()
@@ -284,9 +324,14 @@ public class TextShowUI : MonoBehaviour
 	private void SetCanvasGroups(float alpha, bool blocksRaycasts)
 	{
 		SetTextCanvasGroup(alpha, blocksRaycasts);
-		if (_fadeCanvasGroup)
+		SetBackgroundCanvasGroups(alpha);
+	}
+
+	private void SetBackgroundCanvasGroups(float alpha)
+	{
+		foreach (CanvasGroup group in _fadeCanvasGroups)
 		{
-			_fadeCanvasGroup.alpha = alpha;
+			group.alpha = alpha;
 		}
 	}
 

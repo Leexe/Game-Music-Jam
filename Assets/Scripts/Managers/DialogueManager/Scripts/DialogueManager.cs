@@ -4,6 +4,7 @@ using System.Linq;
 using Ink.Runtime;
 using Ink.UnityIntegration;
 using JetBrains.Annotations;
+using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -24,6 +25,10 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	[SerializeField]
 	private float _characterFadeDuration = 0.5f;
 
+	[FoldoutGroup("Transition Times")]
+	[SerializeField, Min(0f)]
+	private float _delayBeforeChoices = 1f;
+
 	private int _choiceIndex = -1;
 	private string _currentSpeakerName;
 
@@ -31,6 +36,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private Story _story;
 	private bool _storyPlaying;
 	private bool _typewriterPlaying;
+	private Tween _choiceDelayTween;
 
 	/// <summary>
 	///     The dialogue state instance owned by this controller.
@@ -86,6 +92,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
 	private void OnDisable()
 	{
+		_choiceDelayTween.Stop();
 		DialogueState.OnStartStory -= StartStory;
 		DialogueState.OnChoiceSelect -= ContinueStory;
 		DialogueState.OnTypewriterFinish -= SetTypewriterInactive;
@@ -212,6 +219,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return;
 		}
 
+		_choiceDelayTween.Stop();
 		_typewriterPlaying = false;
 		if (_storyPlaying)
 		{
@@ -261,6 +269,12 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return;
 		}
 
+		if (_choiceDelayTween.isAlive)
+		{
+			_choiceDelayTween.Complete();
+			return;
+		}
+
 		// If a choice was selected, proceed down that path
 		if (ChoicesAvailable && _choiceIndex != -1)
 		{
@@ -299,6 +313,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// </summary>
 	private void ExitStory()
 	{
+		_choiceDelayTween.Stop();
 		_storyPlaying = false;
 		_typewriterPlaying = false;
 
@@ -329,7 +344,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			_typewriterPlaying = false;
 			if (ChoicesAvailable)
 			{
-				DisplayChoices();
+				ShowPendingChoices();
 			}
 			else
 			{
@@ -351,6 +366,18 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return;
 		}
 
+		if (_delayBeforeChoices > 0f)
+		{
+			_choiceDelayTween.Stop();
+			_choiceDelayTween = Tween.Delay(this, _delayBeforeChoices, static manager => manager.ShowPendingChoices());
+			return;
+		}
+
+		ShowPendingChoices();
+	}
+
+	private void ShowPendingChoices()
+	{
 		var choices = _story.currentChoices.Select(choice => choice.text).ToList();
 		DialogueState.DisplayChoices(choices);
 		_needToDisplayChoices = false;

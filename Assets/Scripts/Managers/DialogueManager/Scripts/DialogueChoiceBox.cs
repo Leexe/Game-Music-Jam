@@ -5,16 +5,24 @@ using UnityEngine;
 public class DialogueChoiceBox : MonoBehaviour
 {
 	[SerializeField]
-	private DialogueManager _dialogueManager;
+	private TextMeshProUGUI _choiceBoxText;
 
 	[SerializeField]
-	private TextMeshProUGUI _choiceBoxText;
+	private CanvasGroup _canvasGroup;
 
 	[Tooltip("Optional click sound effect. Leave empty for no sound.")]
 	[SerializeField]
 	private EventReference _clickSfx;
 
+	private DialogueManager _dialogueManager;
 	private int _choiceIndex;
+
+	public CanvasGroup CanvasGroup => _canvasGroup;
+
+	private void Reset()
+	{
+		_canvasGroup = GetComponent<CanvasGroup>();
+	}
 
 	public void SetText(string text)
 	{
@@ -33,7 +41,7 @@ public class DialogueChoiceBox : MonoBehaviour
 			AudioManager.Instance.PlayOneShot(_clickSfx);
 		}
 
-		var manager = _dialogueManager ? _dialogueManager : DialogueManager.Instance;
+		DialogueManager manager = _dialogueManager ? _dialogueManager : DialogueManager.Instance;
 		manager.DialogueState.OnChoiceSelect?.Invoke(_choiceIndex);
 	}
 }

@@ -2141,6 +2141,7 @@ MonoBehaviour:
     SerializationNodes: []
   _inkJson: {fileID: 4900000, guid: 1d816753fb9284600bf6c61bcc4f300f, type: 3}
   _characterFadeDuration: 0.5
+  _delayBeforeChoices: 1
 --- !u!1 &7339729798253768515
 GameObject:
   m_ObjectHideFlags: 0
