@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using PrimeTween;
 using Sirenix.OdinInspector;
@@ -62,9 +63,16 @@ public class NotebookUI : MonoBehaviour
 	[SerializeField]
 	private TMP_Text _transcript;
 
+	[SerializeField]
+	private CharacterSO[] _characters = Array.Empty<CharacterSO>();
+
+	[SerializeField]
+	private CharacterSO _defaultSpeaker;
+
 	private const string CallTagIdentifier = "call";
 
 	private readonly StringBuilder _callLog = new();
+	private readonly Dictionary<string, CharacterSO> _characterLookup = new(StringComparer.OrdinalIgnoreCase);
 	private UnityAction[] _tabHandlers;
 	private Sequence _fadeOutSequence;
 	private Tween _fadeInTween;
@@ -75,6 +83,9 @@ public class NotebookUI : MonoBehaviour
 
 	private void Awake()
 	{
+		_transcript.richText = true;
+		BuildCharacterLookup();
+
 		_tabHandlers = new UnityAction[_tabs.Length];
 		for (int i = 0; i < _tabs.Length; i++)
 		{
@@ -305,8 +316,9 @@ public class NotebookUI : MonoBehaviour
 			_callLog.AppendLine(contact.ToUpperInvariant());
 			_lastContact = contact;
 		}
-		_callLog.AppendLine(line);
-		_transcript.text = _callLog.ToString();
+		_callLog.AppendLine(FormatCallLine(line));
+		_callLog.AppendLine();
+		_transcript.text = _callLog.ToString().TrimEnd();
 
 		if (_callLogScroll.gameObject.activeInHierarchy)
 		{
@@ -316,6 +328,54 @@ public class NotebookUI : MonoBehaviour
 		{
 			_scrollToBottomPending = true;
 		}
+	}
+
+	private void BuildCharacterLookup()
+	{
+		foreach (CharacterSO character in _characters)
+		{
+			if (!character)
+			{
+				continue;
+			}
+
+			if (!string.IsNullOrEmpty(character.Id))
+			{
+				_characterLookup[character.Id] = character;
+			}
+
+			if (!string.IsNullOrEmpty(character.Name))
+			{
+				_characterLookup[character.Name] = character;
+			}
+		}
+	}
+
+	private string FormatCallLine(string line)
+	{
+		CharacterSO speaker = ResolveSpeaker(line);
+		if (!speaker)
+		{
+			return line;
+		}
+
+		string hex = ColorUtility.ToHtmlStringRGB(speaker.ColorTheme);
+		return $"<color=#{hex}>{line}</color>";
+	}
+
+	private CharacterSO ResolveSpeaker(string line)
+	{
+		int colonIndex = line.IndexOf(':');
+		if (colonIndex > 0)
+		{
+			string speakerId = line.Substring(0, colonIndex).Trim();
+			if (_characterLookup.TryGetValue(speakerId, out CharacterSO character))
+			{
+				return character;
+			}
+		}
+
+		return _defaultSpeaker;
 	}
 
 	private void ScrollCallLogToBottom()
