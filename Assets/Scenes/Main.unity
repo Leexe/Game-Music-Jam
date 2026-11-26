@@ -3597,7 +3597,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
-  _useUnscaledTime: 0
+  _useUnscaledTime: 1
 --- !u!114 &529636028
 MonoBehaviour:
   m_ObjectHideFlags: 0
