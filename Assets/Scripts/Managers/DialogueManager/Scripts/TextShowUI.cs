@@ -4,6 +4,7 @@ using Febucci.TextAnimatorCore;
 using Febucci.TextAnimatorForUnity;
 using PrimeTween;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -18,10 +19,16 @@ public class TextShowUI : MonoBehaviour
 	private TypewriterComponent _typewriter;
 
 	[SerializeField]
+	private TMP_Text _text;
+
+	[SerializeField]
 	private CanvasGroup _textCanvasGroup;
 
 	[SerializeField]
 	private CanvasGroup[] _fadeCanvasGroups = Array.Empty<CanvasGroup>();
+
+	[SerializeField]
+	private CharacterSO[] _characters = Array.Empty<CharacterSO>();
 
 	[Header("Behaviour")]
 	[InfoBox("Only the hidden typewriter reports Ink line completion to the dialogue manager.")]
@@ -51,6 +58,8 @@ public class TextShowUI : MonoBehaviour
 	private string _currentStandaloneSpeaker;
 	private Sequence _showSequence;
 	private Sequence _dismissSequence;
+	private Dictionary<string, CharacterSO> _characterLookup;
+	private Color _defaultTextColor;
 
 	public event Action StandaloneTextShown;
 	public event Action StandaloneLineFinished;
@@ -58,6 +67,17 @@ public class TextShowUI : MonoBehaviour
 	private void Reset()
 	{
 		_typewriter = GetComponent<TypewriterComponent>();
+		_text = GetComponent<TMP_Text>();
+	}
+
+	private void Awake()
+	{
+		if (!_text)
+		{
+			_text = GetComponent<TMP_Text>();
+		}
+		_defaultTextColor = _text.color;
+		_characterLookup = CharacterSO.BuildLookup(_characters);
 	}
 
 	private void OnEnable()
@@ -120,6 +140,7 @@ public class TextShowUI : MonoBehaviour
 		}
 
 		StopActiveSequences();
+		_text.color = ResolveLineColor(speaker, line);
 
 		if (_isStandaloneLine)
 		{
@@ -342,5 +363,14 @@ public class TextShowUI : MonoBehaviour
 			_textCanvasGroup.alpha = alpha;
 			_textCanvasGroup.blocksRaycasts = blocksRaycasts;
 		}
+	}
+
+	private Color ResolveLineColor(string speaker, string line)
+	{
+		CharacterSO character =
+			!string.IsNullOrEmpty(speaker) && _characterLookup.TryGetValue(speaker, out CharacterSO named)
+				? named
+				: CharacterSO.ResolveFromLine(line, _characterLookup);
+		return character ? character.ColorTheme : _defaultTextColor;
 	}
 }

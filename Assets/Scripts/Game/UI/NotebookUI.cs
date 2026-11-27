@@ -69,6 +69,18 @@ public class NotebookUI : MonoBehaviour
 	[SerializeField]
 	private CharacterSO _defaultSpeaker;
 
+	[SerializeField, Min(0f)]
+	private float _typewriterStartDelay = 1f;
+
+	[SerializeField, Min(0.001f)]
+	private float _typewriterCharDelay = 0.02f;
+
+	[SerializeField, Min(0f)]
+	private float _typewriterPunctuationDelay = 0.3f;
+
+	[SerializeField, Min(0f)]
+	private float _typewriterMiddlePunctuationDelay = 0.1f;
+
 	[Title("Notes")]
 	[SerializeField]
 	private TMP_InputField _notesInput;
@@ -79,7 +91,7 @@ public class NotebookUI : MonoBehaviour
 	private const string CallTagIdentifier = "call";
 
 	private readonly StringBuilder _callLog = new();
-	private readonly Dictionary<string, CharacterSO> _characterLookup = new(StringComparer.OrdinalIgnoreCase);
+	private Dictionary<string, CharacterSO> _characterLookup;
 	private UnityAction[] _tabHandlers;
 	private Sequence _fadeOutSequence;
 	private Tween _fadeInTween;
@@ -88,6 +100,9 @@ public class NotebookUI : MonoBehaviour
 	private float _notesBaseRightOffset;
 	private bool _notesScrollbarDirty;
 	private bool _scrollToBottomPending;
+	private int _revealedVisibleChars = int.MaxValue;
+	private int _targetVisibleChars;
+	private float _charRevealTimer;
 	private DialogueManager _dialogue;
 
 	public event Action<CharacterSO> OnCallContact;
@@ -96,7 +111,7 @@ public class NotebookUI : MonoBehaviour
 	{
 		_transcript.richText = true;
 		_notesBaseRightOffset = _notesInput.textViewport.offsetMax.x;
-		BuildCharacterLookup();
+		_characterLookup = CharacterSO.BuildLookup(_characters);
 
 		_tabHandlers = new UnityAction[_tabs.Length];
 		for (int i = 0; i < _tabs.Length; i++)
@@ -121,6 +136,7 @@ public class NotebookUI : MonoBehaviour
 			_dialogue = DialogueManager.Instance;
 			_dialogue.RegisterTagHandler(CallTagIdentifier, HandleCallTag);
 			_dialogue.OnDialogueEnded += EndCall;
+			_dialogue.DialogueState.OnTypewriterSkip += CompleteCallLogTypewriter;
 		}
 
 		_notesInput.onValueChanged.AddListener(HandleNotesValueChanged);
@@ -153,11 +169,14 @@ public class NotebookUI : MonoBehaviour
 		{
 			_dialogue.UnregisterTagHandler(CallTagIdentifier);
 			_dialogue.OnDialogueEnded -= EndCall;
+			_dialogue.DialogueState.OnTypewriterSkip -= CompleteCallLogTypewriter;
 		}
 	}
 
 	private void Update()
 	{
+		UpdateCallLogTypewriter();
+
 		if (_scrollToBottomPending && _callLogScroll.gameObject.activeInHierarchy)
 		{
 			ScrollCallLogToBottom();
@@ -334,7 +353,11 @@ public class NotebookUI : MonoBehaviour
 		AppendLine(args[0], _dialogue.CurrentStoryText.Trim());
 	}
 
-	private void EndCall() => _lastContact = null;
+	private void EndCall()
+	{
+		_lastContact = null;
+		CompleteCallLogTypewriter();
+	}
 
 	private void AppendLine(string contact, string line)
 	{
@@ -347,9 +370,20 @@ public class NotebookUI : MonoBehaviour
 			_callLog.AppendLine(contact.ToUpperInvariant());
 			_lastContact = contact;
 		}
+
+		_transcript.text = _callLog.ToString().TrimEnd();
+		_transcript.ForceMeshUpdate(ignoreActiveState: true);
+		int previousVisibleChars = _transcript.textInfo.characterCount;
+
 		_callLog.AppendLine(FormatCallLine(line));
 		_callLog.AppendLine();
 		_transcript.text = _callLog.ToString().TrimEnd();
+		_transcript.ForceMeshUpdate(ignoreActiveState: true);
+
+		_revealedVisibleChars = previousVisibleChars;
+		_targetVisibleChars = _transcript.textInfo.characterCount;
+		_transcript.maxVisibleCharacters = _revealedVisibleChars;
+		_charRevealTimer = _typewriterStartDelay;
 
 		if (_callLogScroll.gameObject.activeInHierarchy)
 		{
@@ -361,52 +395,48 @@ public class NotebookUI : MonoBehaviour
 		}
 	}
 
-	private void BuildCharacterLookup()
+	private void UpdateCallLogTypewriter()
 	{
-		foreach (CharacterSO character in _characters)
+		if (_revealedVisibleChars >= _targetVisibleChars)
 		{
-			if (!character)
-			{
-				continue;
-			}
-
-			if (!string.IsNullOrEmpty(character.Id))
-			{
-				_characterLookup[character.Id] = character;
-			}
-
-			if (!string.IsNullOrEmpty(character.Name))
-			{
-				_characterLookup[character.Name] = character;
-			}
+			return;
 		}
+
+		float dt = _useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+		_charRevealTimer -= dt;
+
+		while (_charRevealTimer <= 0f && _revealedVisibleChars < _targetVisibleChars)
+		{
+			char c = _transcript.textInfo.characterInfo[_revealedVisibleChars].character;
+			_revealedVisibleChars++;
+			_charRevealTimer += c switch
+			{
+				'.' or '!' or '?' => _typewriterPunctuationDelay,
+				',' or ':' or ';' => _typewriterMiddlePunctuationDelay,
+				_ => _typewriterCharDelay,
+			};
+		}
+
+		_transcript.maxVisibleCharacters = _revealedVisibleChars;
+	}
+
+	private void CompleteCallLogTypewriter()
+	{
+		if (_revealedVisibleChars >= _targetVisibleChars)
+		{
+			return;
+		}
+
+		_revealedVisibleChars = _targetVisibleChars;
+		_transcript.maxVisibleCharacters = _targetVisibleChars;
 	}
 
 	private string FormatCallLine(string line)
 	{
-		CharacterSO speaker = ResolveSpeaker(line);
-		if (!speaker)
-		{
-			return line;
-		}
-
-		string hex = ColorUtility.ToHtmlStringRGB(speaker.ColorTheme);
+		string hex = ColorUtility.ToHtmlStringRGB(
+			CharacterSO.ResolveFromLine(line, _characterLookup, _defaultSpeaker).ColorTheme
+		);
 		return $"<color=#{hex}>{line}</color>";
-	}
-
-	private CharacterSO ResolveSpeaker(string line)
-	{
-		int colonIndex = line.IndexOf(':');
-		if (colonIndex > 0)
-		{
-			string speakerId = line.Substring(0, colonIndex).Trim();
-			if (_characterLookup.TryGetValue(speakerId, out CharacterSO character))
-			{
-				return character;
-			}
-		}
-
-		return _defaultSpeaker;
 	}
 
 	private void ScrollCallLogToBottom()
@@ -429,7 +459,9 @@ public class NotebookUI : MonoBehaviour
 			scrollbar.gameObject.SetActive(needsScrollbar);
 			float scrollbarWidth = ((RectTransform)scrollbar.transform).sizeDelta.x;
 			Vector2 offsetMax = viewport.offsetMax;
-			offsetMax.x = needsScrollbar ? _notesBaseRightOffset - scrollbarWidth - _notesScrollbarSpacing : _notesBaseRightOffset;
+			offsetMax.x = needsScrollbar
+				? _notesBaseRightOffset - scrollbarWidth - _notesScrollbarSpacing
+				: _notesBaseRightOffset;
 			viewport.offsetMax = offsetMax;
 			_notesInput.textComponent.ForceMeshUpdate();
 			scrollbar.size = needsScrollbar

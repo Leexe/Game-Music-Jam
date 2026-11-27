@@ -5632,6 +5632,10 @@ PrefabInstance:
       propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3678312735160258345, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
+      propertyPath: _typewriterStartDelay
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4929495728972662323, guid: 1efbae3ec95734464be9370a2abee1b8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
