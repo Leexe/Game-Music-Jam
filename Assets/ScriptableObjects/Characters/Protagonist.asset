@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSO
   Name: John Speklum
   Id: protag
-  ColorTheme: {r: 0.43, g: 0.41, b: 0.39, a: 1}
-  Icon: {fileID: -8868272330977153355, guid: c3b39423752b942c38856d3c80325641, type: 3}
+  ColorTheme: {r: 0.254717, g: 0.2388791, b: 0.21987364, a: 1}
+  Icon: {fileID: 21300000, guid: c3b39423752b942c38856d3c80325641, type: 3}
