@@ -169,7 +169,7 @@ RectTransform:
   m_LocalScale: {x: 1.4999995, y: 1.4999995, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1021949463332834363}
+  m_Father: {fileID: 5293444614611734293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 50}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -224,7 +224,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 0
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &521004132794204744
 GameObject:
@@ -1619,7 +1619,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8279575943179624295}
   - {fileID: 3656415060186307502}
   - {fileID: 2961972573059031120}
   - {fileID: 2731742586292892396}
@@ -3269,6 +3268,7 @@ RectTransform:
   m_Children:
   - {fileID: 612401273132629973}
   - {fileID: 1133454769523124095}
+  - {fileID: 8279575943179624295}
   - {fileID: 8091644873318356274}
   - {fileID: 5252083083123237619}
   - {fileID: 1021949463332834363}
@@ -5730,7 +5730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 2100000, guid: 735f7fcf0e1b42cea123a4bd16dd3c45, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -5756,7 +5756,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 0
   m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &9184895725877578768
 GameObject:

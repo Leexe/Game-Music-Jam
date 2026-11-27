@@ -12,8 +12,16 @@ public class ClickableTextUI : MonoBehaviour
 	[SerializeField]
 	private string _textDisplay = "";
 
+	[SerializeField]
+	private string _interactionId = "";
+
 	public void DisplayText()
 	{
+		if (!string.IsNullOrWhiteSpace(_interactionId))
+		{
+			DialogueManager.Instance.RecordInteraction(_interactionId);
+		}
+
 		DialogueManager.Instance.DisplayLoneLine(_textDisplay);
 	}
 

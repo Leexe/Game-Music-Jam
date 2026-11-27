@@ -29,6 +29,10 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	[SerializeField, Min(0f)]
 	private float _delayBeforeChoices = 1f;
 
+	private readonly HashSet<string> _collectedItems = new(StringComparer.OrdinalIgnoreCase);
+	private readonly HashSet<string> _interactedObjects = new(StringComparer.OrdinalIgnoreCase);
+	private InventoryUI _inventory;
+	private CameraManager _camera;
 	private int _choiceIndex = -1;
 	private string _currentSpeakerName;
 
@@ -46,6 +50,21 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
 	public bool IsStoryPlaying => _storyPlaying;
 	public string CurrentStoryText => _story != null ? _story.currentText : string.Empty;
+
+	public string CurrentChoiceKnot
+	{
+		get
+		{
+			if (_story == null || _story.currentChoices.Count == 0)
+			{
+				return string.Empty;
+			}
+
+			string sourcePath = _story.currentChoices[0].sourcePath;
+			int dotIndex = sourcePath.IndexOf('.');
+			return dotIndex > 0 ? sourcePath.Substring(0, dotIndex) : sourcePath;
+		}
+	}
 
 	private bool ChoicesAvailable => _story.currentChoices.Count > 0;
 
@@ -79,6 +98,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		_story.BindExternalFunction("IsQuestActive", (string questId) => IsQuestActive(questId));
 		_story.BindExternalFunction("StartQuest", (string questId) => StartQuest(questId));
 		_story.BindExternalFunction("CompleteQuest", (string questId) => CompleteQuest(questId));
+		_story.BindExternalFunction("HasItem", (string itemId) => HasItem(itemId), lookaheadSafe: true);
+		_story.BindExternalFunction("HasInteracted", (string objectId) => HasInteracted(objectId), lookaheadSafe: true);
+		_story.BindExternalFunction("RecordInteraction", (string objectId) => RecordInteraction(objectId));
 	}
 
 	private void OnEnable()
@@ -107,6 +129,20 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private void Start()
 	{
 		DialogueState.RemoveAllCharacters();
+		_inventory = FindFirstObjectByType<InventoryUI>();
+		_camera = CameraManager.Instance;
+		if (_camera)
+		{
+			_camera.OnPhotoTaken += HandlePhotoTaken;
+		}
+	}
+
+	private void OnDestroy()
+	{
+		if (_camera)
+		{
+			_camera.OnPhotoTaken -= HandlePhotoTaken;
+		}
 	}
 
 	#endregion
@@ -184,6 +220,20 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		QuestManager.Instance.CompleteQuest(questId);
 	}
 
+	public void RecordItem(string itemId) => _collectedItems.Add(itemId.Trim());
+
+	public void RecordInteraction(string objectId) => _interactedObjects.Add(objectId.Trim());
+
+	public bool HasItem(string itemId)
+	{
+		string trimmed = itemId.Trim();
+		return _collectedItems.Contains(trimmed) || (_inventory && _inventory.HasItem(trimmed));
+	}
+
+	public bool HasInteracted(string objectId) => _interactedObjects.Contains(objectId.Trim());
+
+	private void HandlePhotoTaken(PhotoSpot spot) => _collectedItems.Add(spot.name);
+
 	#endregion
 
 	#region Story Managers
@@ -221,12 +271,13 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
 		_choiceDelayTween.Stop();
 		_typewriterPlaying = false;
+		_needToDisplayChoices = false;
+		_choiceIndex = -1;
+		_currentSpeakerName = "";
 		if (_storyPlaying)
 		{
 			// Restart the story
 			_storyPlaying = false;
-			_choiceIndex = -1;
-			_currentSpeakerName = "";
 			DialogueState.RemoveAllCharacters();
 		}
 
@@ -276,9 +327,12 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		}
 
 		// If a choice was selected, proceed down that path
-		if (ChoicesAvailable && _choiceIndex != -1)
+		if (_choiceIndex != -1)
 		{
-			_story.ChooseChoiceIndex(_choiceIndex);
+			if (ChoicesAvailable && _choiceIndex >= 0 && _choiceIndex < _story.currentChoices.Count)
+			{
+				_story.ChooseChoiceIndex(_choiceIndex);
+			}
 			_choiceIndex = -1;
 		}
 
@@ -304,6 +358,18 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// <param name="choiceIndex">Index of the selected choice.</param>
 	private void ContinueStory(int choiceIndex)
 	{
+		if (!_storyPlaying || !DialogueState.CanAdvanceStory || !ChoicesAvailable)
+		{
+			return;
+		}
+
+		if (choiceIndex < 0 || choiceIndex >= _story.currentChoices.Count)
+		{
+			return;
+		}
+
+		_choiceDelayTween.Stop();
+		_typewriterPlaying = false;
 		_choiceIndex = choiceIndex;
 		ContinueStory();
 	}
@@ -316,6 +382,9 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		_choiceDelayTween.Stop();
 		_storyPlaying = false;
 		_typewriterPlaying = false;
+		_needToDisplayChoices = false;
+		_choiceIndex = -1;
+		_currentSpeakerName = "";
 
 		DialogueState.EndStory();
 		OnDialogueEnded?.Invoke();

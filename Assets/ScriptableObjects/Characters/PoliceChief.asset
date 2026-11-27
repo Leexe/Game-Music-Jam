@@ -15,4 +15,4 @@ MonoBehaviour:
   Name: Police Chief
   Id: chief
   ColorTheme: {r: 0.14, g: 0.24, b: 0.46, a: 1}
-  Icon: {fileID: 0}
+  Icon: {fileID: -2678060687129428065, guid: 69170132c98fa4b5db1c7fd3a78f04b1, type: 3}

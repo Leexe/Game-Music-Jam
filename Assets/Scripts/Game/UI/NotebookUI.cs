@@ -90,6 +90,8 @@ public class NotebookUI : MonoBehaviour
 	private bool _scrollToBottomPending;
 	private DialogueManager _dialogue;
 
+	public event Action<CharacterSO> OnCallContact;
+
 	private void Awake()
 	{
 		_transcript.richText = true;
@@ -324,6 +326,11 @@ public class NotebookUI : MonoBehaviour
 
 	private void HandleCallTag(string[] args)
 	{
+		if (_characterLookup.TryGetValue(args[0], out CharacterSO character))
+		{
+			OnCallContact?.Invoke(character);
+		}
+
 		AppendLine(args[0], _dialogue.CurrentStoryText.Trim());
 	}
 
@@ -415,11 +422,6 @@ public class NotebookUI : MonoBehaviour
 	{
 		_notesScrollbarDirty = false;
 		Scrollbar scrollbar = _notesInput.verticalScrollbar;
-		if (!scrollbar)
-		{
-			return;
-		}
-
 		RectTransform viewport = _notesInput.textViewport;
 		bool needsScrollbar = _notesInput.textComponent.preferredHeight > viewport.rect.height + 0.01f;
 		if (scrollbar.gameObject.activeSelf != needsScrollbar)

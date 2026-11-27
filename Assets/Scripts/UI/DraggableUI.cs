@@ -42,6 +42,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 	[HideInInspector]
 	public InventorySlotUI InventorySlot;
 	public bool IsInteractable { get; private set; } = true;
+	public ItemData ItemData => _itemData;
 
 	private Canvas _rootCanvas;
 	private Sequence _shakeTween;
