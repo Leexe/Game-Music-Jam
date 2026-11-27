@@ -69,6 +69,13 @@ public class NotebookUI : MonoBehaviour
 	[SerializeField]
 	private CharacterSO _defaultSpeaker;
 
+	[Title("Notes")]
+	[SerializeField]
+	private TMP_InputField _notesInput;
+
+	[SerializeField, Min(0f)]
+	private float _notesScrollbarSpacing = 8f;
+
 	private const string CallTagIdentifier = "call";
 
 	private readonly StringBuilder _callLog = new();
@@ -78,12 +85,15 @@ public class NotebookUI : MonoBehaviour
 	private Tween _fadeInTween;
 	private int _activeTabIndex = -1;
 	private string _lastContact;
+	private float _notesBaseRightOffset;
+	private bool _notesScrollbarDirty;
 	private bool _scrollToBottomPending;
 	private DialogueManager _dialogue;
 
 	private void Awake()
 	{
 		_transcript.richText = true;
+		_notesBaseRightOffset = _notesInput.textViewport.offsetMax.x;
 		BuildCharacterLookup();
 
 		_tabHandlers = new UnityAction[_tabs.Length];
@@ -111,6 +121,7 @@ public class NotebookUI : MonoBehaviour
 			_dialogue.OnDialogueEnded += EndCall;
 		}
 
+		_notesInput.onValueChanged.AddListener(HandleNotesValueChanged);
 		for (int i = 0; i < _tabs.Length; i++)
 		{
 			_tabs[i].Tab.onClick.AddListener(_tabHandlers[i]);
@@ -119,6 +130,7 @@ public class NotebookUI : MonoBehaviour
 
 	private void OnDisable()
 	{
+		_notesInput.onValueChanged.RemoveListener(HandleNotesValueChanged);
 		for (int i = 0; i < _tabs.Length; i++)
 		{
 			_tabs[i].Tab.onClick.RemoveListener(_tabHandlers[i]);
@@ -147,6 +159,14 @@ public class NotebookUI : MonoBehaviour
 		if (_scrollToBottomPending && _callLogScroll.gameObject.activeInHierarchy)
 		{
 			ScrollCallLogToBottom();
+		}
+	}
+
+	private void LateUpdate()
+	{
+		if (_notesScrollbarDirty && _notesInput.gameObject.activeInHierarchy)
+		{
+			UpdateNotesScrollbar();
 		}
 	}
 
@@ -286,6 +306,10 @@ public class NotebookUI : MonoBehaviour
 		{
 			activeTab.InputField.Select();
 			activeTab.InputField.ActivateInputField();
+			if (activeTab.InputField == _notesInput)
+			{
+				_notesScrollbarDirty = true;
+			}
 		}
 		else
 		{
@@ -383,5 +407,32 @@ public class NotebookUI : MonoBehaviour
 		_scrollToBottomPending = false;
 		Canvas.ForceUpdateCanvases();
 		_callLogScroll.verticalNormalizedPosition = 0f;
+	}
+
+	private void HandleNotesValueChanged(string _) => _notesScrollbarDirty = true;
+
+	private void UpdateNotesScrollbar()
+	{
+		_notesScrollbarDirty = false;
+		Scrollbar scrollbar = _notesInput.verticalScrollbar;
+		if (!scrollbar)
+		{
+			return;
+		}
+
+		RectTransform viewport = _notesInput.textViewport;
+		bool needsScrollbar = _notesInput.textComponent.preferredHeight > viewport.rect.height + 0.01f;
+		if (scrollbar.gameObject.activeSelf != needsScrollbar)
+		{
+			scrollbar.gameObject.SetActive(needsScrollbar);
+			float scrollbarWidth = ((RectTransform)scrollbar.transform).sizeDelta.x;
+			Vector2 offsetMax = viewport.offsetMax;
+			offsetMax.x = needsScrollbar ? _notesBaseRightOffset - scrollbarWidth - _notesScrollbarSpacing : _notesBaseRightOffset;
+			viewport.offsetMax = offsetMax;
+			_notesInput.textComponent.ForceMeshUpdate();
+			scrollbar.size = needsScrollbar
+				? Mathf.Clamp01(viewport.rect.height / _notesInput.textComponent.preferredHeight)
+				: 1f;
+		}
 	}
 }
