@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSO
   Name: Laila Oscura
   Id: laila
-  ColorTheme: {r: 0.12, g: 0.39, b: 0.43, a: 1}
-  Icon: {fileID: 0}
+  ColorTheme: {r: 0.3241812, g: 0.4433962, b: 0.34802422, a: 1}
+  Icon: {fileID: 21300000, guid: d1f680e6c705d4446b57b4033b19bfd8, type: 3}
