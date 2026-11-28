@@ -31,9 +31,7 @@ go on like this. Please. #LL
 
 With deepest fondness, #LL
 your faithful servant #LL
-
-+ Finish reading. #LL
--> items 
+-> END
 
 === coat_item === 
 
@@ -57,19 +55,12 @@ You see "August 8th, 1964," written at the bottom of one of the pages.  #ast_boo
 
 You examine the plate of unfinished food. Gingerly, you touch it. It's still ever so slightly
 warm. Someone ate here this morning before leaving in a hurry. #food 
-+ Finish looking. #food 
--> items 
+-> END
 
 === ned_card === 
 
 You examine the business card. It has an appointment time written on the back. You're not sure who it's from. #bus_card
-
-Take a picture of it? #bus_card
-* Yes. #bus_card 
--> items 
-
-* No. #bus_card 
--> items 
+-> END
 
 
 

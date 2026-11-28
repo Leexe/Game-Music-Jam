@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Key
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.ItemData
   ItemName: key
-  ClickDescription: A pair of keys, one look like car keys...
-  Description: A pair of keys
+  ClickDescription: 
   Icon: {fileID: 21300000, guid: f25f8fd18d83541d29aee6276c6565a9, type: 3}
+  PolaroidImage: {fileID: 0}

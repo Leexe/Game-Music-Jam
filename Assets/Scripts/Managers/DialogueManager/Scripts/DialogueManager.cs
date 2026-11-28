@@ -238,7 +238,14 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 
 	public bool HasInteracted(string objectId) => _interactedObjects.Contains(objectId.Trim());
 
-	private void HandlePhotoTaken(PhotoSpot spot) => _collectedItems.Add(spot.name);
+	private void HandlePhotoTaken(PhotoSpot spot)
+	{
+		_collectedItems.Add(spot.name);
+		if (spot.ItemData != null && !string.IsNullOrWhiteSpace(spot.ItemData.ItemName))
+		{
+			_collectedItems.Add(spot.ItemData.ItemName.Trim());
+		}
+	}
 
 	#endregion
 
@@ -516,7 +523,10 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		_tagHandlers["sfx"] = HandleSFXTag;
 		_tagHandlers["ms"] = HandleMusicTag;
 		_tagHandlers["ab"] = HandleAmbienceTag;
-		_tagHandlers["ast"] = _ => { };
+		foreach (string itemTag in new[] { "ast", "ll", "coat", "food", "bus", "items" })
+		{
+			_tagHandlers[itemTag] = _ => { };
+		}
 	}
 
 	/// <summary>

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Knife
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.ItemData
   ItemName: knife
-  ClickDescription: A clean kitchen knife, whats it doing under the coach?
+  ClickDescription: A photo of a person whipping blood off of a knife
   Icon: {fileID: 21300000, guid: 3bb9e3fd63df04d76835bfd69ed58d5b, type: 3}
   PolaroidImage: {fileID: 21300000, guid: 9ffd5f67f17874709945d45f396bf8cc, type: 3}

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Breakfast
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.ItemData
   ItemName: food_item
-  ClickDescription: 
+  ClickDescription: Someone halfway through eating breakfast
   Icon: {fileID: 21300000, guid: faa9fb47618f64881b89d98e03b7518e, type: 3}
   PolaroidImage: {fileID: 21300000, guid: 47515683db6fc4cf0994b3880f148f97, type: 3}

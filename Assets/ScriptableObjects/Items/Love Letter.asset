@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.ItemData
   ItemName: love_letter
   ClickDescription: 
-  Icon: {fileID: 21300000, guid: e7f7afc9834e540a2bd9c55328309eeb, type: 3}
+  Icon: {fileID: 21300000, guid: 8b280c3d3578d4e178cbd815df7f0750, type: 3}
   PolaroidImage: {fileID: 0}
