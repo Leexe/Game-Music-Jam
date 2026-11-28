@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -13,6 +14,12 @@ public class CameraItem : MonoBehaviour
 	[SerializeField]
 	private bool _hideCursorWhileHeld = true;
 
+	[SerializeField]
+	private string _nothingCapturedText = "The camera captured nothing.";
+
+	[SerializeField, Min(0f)]
+	private float _nothingCapturedDelay = 1f;
+
 	private RectTransform _rect;
 	private Canvas _rootCanvas;
 
@@ -22,6 +29,7 @@ public class CameraItem : MonoBehaviour
 	private int _homeSiblingIndex;
 
 	private readonly List<RaycastResult> _hits = new List<RaycastResult>();
+	private Tween _nothingDialogueDelayTween;
 
 	private static CameraItem _active;
 	private static bool _suppressClickUntilRelease;
@@ -70,12 +78,22 @@ public class CameraItem : MonoBehaviour
 		if (mouse.leftButton.wasPressedThisFrame)
 		{
 			_suppressClickUntilRelease = true;
+			_nothingDialogueDelayTween.Stop();
 			PhotoSpot spot = FindPhotoSpotUnder(mousePos);
 			PutBack();
 
 			if (spot != null)
 			{
 				CameraManager.Instance.TakePhoto(spot);
+			}
+			else
+			{
+				CameraManager.Instance.Flash();
+				_nothingDialogueDelayTween = Tween.Delay(
+					this,
+					_nothingCapturedDelay,
+					static camera => DialogueManager.Instance.DisplayLoneLine(camera._nothingCapturedText)
+				);
 			}
 		}
 	}
@@ -148,7 +166,7 @@ public class CameraItem : MonoBehaviour
 			}
 
 			PhotoSpot spot = hit.gameObject.GetComponentInParent<PhotoSpot>();
-			if (spot != null)
+			if (spot != null && !spot.HasBeenPhotographed && spot.PastImage != null)
 			{
 				return spot;
 			}

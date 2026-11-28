@@ -54,6 +54,7 @@ public class TextShowUI : MonoBehaviour
 	private DialogueState _state;
 	private bool _isStandaloneLine;
 	private bool _isFadingOut;
+	private int _standaloneStartFrame;
 	private string _currentStandaloneLine;
 	private string _currentStandaloneSpeaker;
 	private Sequence _showSequence;
@@ -103,6 +104,7 @@ public class TextShowUI : MonoBehaviour
 	{
 		if (
 			_isStandaloneLine
+			&& Time.frameCount != _standaloneStartFrame
 			&& _state.CanAdvanceStory
 			&& Mouse.current != null
 			&& Mouse.current.leftButton.wasPressedThisFrame
@@ -169,6 +171,7 @@ public class TextShowUI : MonoBehaviour
 		}
 
 		_isStandaloneLine = true;
+		_standaloneStartFrame = Time.frameCount;
 	}
 
 	private void ContinueStandaloneLine()

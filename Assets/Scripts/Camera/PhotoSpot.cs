@@ -7,13 +7,9 @@ using UnityEngine.UI;
 /// </summary>
 public class PhotoSpot : MonoBehaviour
 {
-	[Tooltip("Optional ItemData asset for this clue (provides Inventory Icon and Polaroid Image).")]
+	[Tooltip("ItemData asset for this clue (provides Inventory Icon and Polaroid Image).")]
 	[SerializeField]
 	private ItemData _itemData;
-
-	[Tooltip("The PNG shown in the polaroid (the past).")]
-	[SerializeField]
-	private Sprite _pastImage;
 
 	[Tooltip("Optional text written under the polaroid.")]
 	[SerializeField]
@@ -30,7 +26,7 @@ public class PhotoSpot : MonoBehaviour
 
 	public ItemData ItemData => _itemData;
 
-	public Sprite PastImage => _itemData != null && _itemData.PolaroidImage != null ? _itemData.PolaroidImage : _pastImage;
+	public Sprite PastImage => _itemData != null ? _itemData.PolaroidImage : null;
 
 	public string Caption => _caption;
 

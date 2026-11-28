@@ -58,7 +58,7 @@ public class CameraManager : MonoSingleton<CameraManager>
 	/// </summary>
 	public void TakePhoto(PhotoSpot spot)
 	{
-		if (IsBusy)
+		if (IsBusy || spot.HasBeenPhotographed || spot.PastImage == null)
 		{
 			return;
 		}
@@ -81,6 +81,13 @@ public class CameraManager : MonoSingleton<CameraManager>
 		OpenPolaroid(photo, caption, false);
 	}
 
+	public Tween Flash()
+	{
+		Tween.StopAll(_flash);
+		_flash.alpha = 1f;
+		return Tween.Alpha(_flash, 0f, _flashDuration, Ease.OutQuad);
+	}
+
 	private void OpenPolaroid(Sprite photo, string caption, bool withFlash)
 	{
 		IsBusy = true;
@@ -101,15 +108,12 @@ public class CameraManager : MonoSingleton<CameraManager>
 
 		if (withFlash)
 		{
-			_flash.alpha = 1f;
-			_flash.blocksRaycasts = true;
-			seq = seq.Group(Tween.Alpha(_flash, 0f, _flashDuration, Ease.OutQuad))
+			seq = seq.Group(Flash())
 				.Chain(Tween.Alpha(_polaroidPhoto, 1f, _developDuration, Ease.InOutSine));
 		}
 
 		seq.ChainCallback(() =>
 		{
-			_flash.blocksRaycasts = false;
 			IsBusy = false; // now the player can close it
 		});
 	}
