@@ -186,9 +186,10 @@ public class PhoneInterviewUI : MonoBehaviour
 	private void HandleDialogueStart()
 	{
 		_canContinue = _dialogue.IsStoryPlaying;
-		if (_dialogue.CurrentChoiceKnot.StartsWith("new_interview", StringComparison.OrdinalIgnoreCase))
+		if (_dialogue.IsStoryPlaying && _dialogue.CurrentChoiceKnot.StartsWith("new_interview", StringComparison.OrdinalIgnoreCase))
 		{
 			HideCharacterSprite();
+			AudioManager.Instance.PlayMusic(FMODEvents.Instance.PhoneCall_Bgm);
 		}
 	}
 

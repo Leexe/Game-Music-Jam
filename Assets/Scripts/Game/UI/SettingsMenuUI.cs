@@ -60,7 +60,10 @@ public class SettingsMenuUI : MonoBehaviour
 
 	private void OnEnable()
 	{
-		InputManager.Instance.OnEscapePerformed += ToggleUI;
+		if (InputManager.Instance)
+		{
+			InputManager.Instance.OnEscapePerformed += ToggleUI;
+		}
 		if (_settingsPanel.activeSelf)
 		{
 			OpenMenu();
@@ -92,9 +95,20 @@ public class SettingsMenuUI : MonoBehaviour
 			return;
 		}
 
-		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.SettingsButton_Sfx);
+		if (SceneManager.GetActiveScene().name == "MainMenu")
+		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.SettingsButton_Sfx);
+			CloseMenu();
+			return;
+		}
+
 		_returningToMenu = true;
-		AudioManager.Instance.StopAllEvents();
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
+		AudioManager.Instance.StopMusic(false);
+		AudioManager.Instance.StopAmbience();
+		AudioManager.Instance.StopAllEvents(false);
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.SettingsButton_Sfx);
 		SceneManager.LoadSceneAsync("MainMenu");
 	}
 
@@ -126,14 +140,14 @@ public class SettingsMenuUI : MonoBehaviour
 		_isOpen = true;
 		_previousTimeScale = Time.timeScale;
 		_cursorWasVisible = Cursor.visible;
-		_previousSelection = EventSystem.current.currentSelectedGameObject;
+		_previousSelection = EventSystem.current ? EventSystem.current.currentSelectedGameObject : null;
 		Time.timeScale = 0f;
 		Cursor.visible = true;
 
 		_settingsPanel.SetActive(true);
 		foreach (VolumeControl control in _volumes)
 		{
-			control.Slider.SetValueWithoutNotify(AudioManager.Instance.GetVolume(control.Channel));
+			control.Slider.SetValueWithoutNotify(AudioManager.Instance ? AudioManager.Instance.GetVolume(control.Channel) : 1f);
 		}
 		_resume.Select();
 	}

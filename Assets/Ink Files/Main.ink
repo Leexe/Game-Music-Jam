@@ -1,10 +1,15 @@
 EXTERNAL HasItem(itemId)
 EXTERNAL HasInteracted(objectId)
 EXTERNAL RecordInteraction(objectId)
+EXTERNAL HasPhotographedAllEvidence()
 
 VAR learned_safe_combo = false
 VAR heard_lawyer_knife_lie = false
 VAR heard_mitch_saw_lawyer = false
+VAR talked_to_laila = false
+VAR talked_to_naismith = false
+VAR talked_to_mitch = false
+VAR talked_to_chief_reveal = false
 
 -> new_interview
 
@@ -19,6 +24,12 @@ INCLUDE items.ink
 === function RecordInteraction(objectId) ===
 ~ return
 
+=== function HasPhotographedAllEvidence() ===
+~ return false
+
+=== function CanCallChief() ===
+~ return talked_to_laila and talked_to_naismith and talked_to_mitch and HasPhotographedAllEvidence()
+
 === new_interview === 
 
 Who to call? 
@@ -32,8 +43,11 @@ Who to call?
 + [Mitch, the chauffeur.] 
 -> driver_greet
 
-+ [The chief. I need to speak to him.] 
++ {CanCallChief() and not talked_to_chief_reveal} [The chief. I need to speak to him.] 
 -> chief_reveal 
+
++ {CanCallChief() and talked_to_chief_reveal} [The chief. I need to speak to him.] 
+-> chief_convince 
 
 + [Put down the phone.]
 -> END
@@ -51,7 +65,10 @@ Who to call?
 + [Mitch, the chauffeur.] 
 -> driver_greet
 
-+ [The chief. I need to speak to him.]  
++ {CanCallChief() and not talked_to_chief_reveal} [The chief. I need to speak to him.]  
+-> chief_reveal 
+
++ {CanCallChief() and talked_to_chief_reveal} [The chief. I need to speak to him.]  
 -> chief_convince 
 
 + [Put down the phone.]
@@ -64,6 +81,7 @@ Beginning of Lawyer Interview
 */ 
 
 === lawyer_interview ===
+~ talked_to_naismith = true
 PROTAG: What do you know about... #call_Naismith
 
 + ...the missing car? #call_Naismith
@@ -123,6 +141,7 @@ Beginning of assistant interview
 */
 
 === asst_interview === 
+~ talked_to_laila = true
 
 PROTAG: What do you know about... #call_Laila
 + ...Lumina's appointment with her lawyer? #call_Laila
@@ -186,6 +205,7 @@ Beginning of driver interview
 */ 
 
 === driver_greet === 
+~ talked_to_mitch = true
 PROTAG: Hello, Mr. Ackleman. #call_Mitch
 -> driver_interview 
 
@@ -241,6 +261,7 @@ PROTAG: Huh. Thank you for that information.  #call_Mitch
 
 
 === chief_reveal === 
+~ talked_to_chief_reveal = true
 PROTAG: Hi, Chief. Something about this case seems... strange. #call_Chief
 CHIEF: How so? #call_Chief
 PROTAG: No one can tell me where Lumina's money comes from. She collects knives. There's a weird chemical smell coming from one of the rooms. Was she... involved in something? #call_Chief

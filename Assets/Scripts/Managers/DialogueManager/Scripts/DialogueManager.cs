@@ -106,6 +106,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		_story.BindExternalFunction("HasItem", (string itemId) => HasItem(itemId), lookaheadSafe: true);
 		_story.BindExternalFunction("HasInteracted", (string objectId) => HasInteracted(objectId), lookaheadSafe: true);
 		_story.BindExternalFunction("RecordInteraction", (string objectId) => RecordInteraction(objectId));
+		_story.BindExternalFunction("HasPhotographedAllEvidence", () => HasPhotographedAllEvidence(), lookaheadSafe: true);
 	}
 
 	private void OnEnable()
@@ -237,6 +238,27 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	}
 
 	public bool HasInteracted(string objectId) => _interactedObjects.Contains(objectId.Trim());
+
+	public bool HasPhotographedAllEvidence()
+	{
+		PhotoSpot[] photoSpots = FindObjectsByType<PhotoSpot>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+		bool hasEvidence = false;
+		foreach (PhotoSpot spot in photoSpots)
+		{
+			if (spot == null || spot.PastImage == null)
+			{
+				continue;
+			}
+
+			hasEvidence = true;
+			if (!spot.HasBeenPhotographed)
+			{
+				return false;
+			}
+		}
+
+		return hasEvidence;
+	}
 
 	private void HandlePhotoTaken(PhotoSpot spot)
 	{

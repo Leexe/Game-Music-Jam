@@ -264,13 +264,13 @@ public class NotebookUI : MonoBehaviour
 	public void DockAboveBottomBar()
 	{
 		gameObject.SetActive(true);
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PaperRustling_Sfx);
 		if (_dragHandle.IsDockedAbove(_bottomBar))
 		{
 			_dragHandle.MoveToPosition(_interviewPosition.position, _moveDuration, _moveEase, _useUnscaledTime);
 			return;
 		}
 
-		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PaperRustling_Sfx);
 		_dragHandle.PlaceAboveBar(_bottomBar);
 	}
 
