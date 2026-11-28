@@ -15,6 +15,9 @@ public class Door : MonoBehaviour
 	[SerializeField]
 	private GameObject _targetRoom;
 
+	[SerializeField]
+	private CombinationLock _lock;
+
 	private Button _button;
 
 	private void OnEnable()
@@ -69,6 +72,11 @@ public class Door : MonoBehaviour
 
 	public void Enter()
 	{
+		if (_lock != null && _lock.IsLocked)
+		{
+			_lock.Open(this);
+			return;
+		}
 		RoomManager.Instance.EnterRoom(_targetRoom, (RectTransform)transform);
 	}
 }
