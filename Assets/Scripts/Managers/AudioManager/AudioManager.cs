@@ -557,6 +557,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 		{
 			_masterBus.stopAllEvents(allowFadeOut ? STOP_MODE.ALLOWFADEOUT : STOP_MODE.IMMEDIATE);
 		}
+		_currentMusicReference = default;
 	}
 
 	#endregion

@@ -196,6 +196,8 @@ public class PhoneInterviewUI : MonoBehaviour
 
 	private void HandleCallContact(CharacterSO character)
 	{
+		PlayCallMusic(character);
+
 		if (!_characterSprite)
 		{
 			return;
@@ -253,6 +255,23 @@ public class PhoneInterviewUI : MonoBehaviour
 		_phoneShakeSequence.Complete();
 		AnimatePhoneUI(0f, PhoneHiddenPos);
 		HideCharacterSprite();
+		AudioManager.Instance.PlayMusic(FMODEvents.Instance.Gameplay_Bgm);
+	}
+
+	private static void PlayCallMusic(CharacterSO character)
+	{
+		FMODEvents events = FMODEvents.Instance;
+		FMODUnity.EventReference theme = character != null && character.Id != null
+			? character.Id.ToLowerInvariant() switch
+			{
+				"chief" => events.PoliceTheme_Bgm,
+				"laila" => events.AssistantTheme_Bgm,
+				"lumina" => events.HeiressTheme_Bgm,
+				_ => events.PhoneCall_Bgm,
+			}
+			: events.PhoneCall_Bgm;
+
+		AudioManager.Instance.PlayMusic(theme);
 	}
 
 	private float HandleGetChoiceDelay(int choiceIndex)
@@ -271,6 +290,7 @@ public class PhoneInterviewUI : MonoBehaviour
 
 	private void ShakePhone()
 	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PhoneRingPickUp_Sfx);
 		_phoneSequence.Complete();
 		_phoneShakeSequence.Complete();
 		_phoneShakeSequence = Sequence.Create(useUnscaledTime: _useUnscaledTime);

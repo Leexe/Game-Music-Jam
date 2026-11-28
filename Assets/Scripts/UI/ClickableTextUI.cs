@@ -1,3 +1,5 @@
+using System;
+using FMODUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,11 +11,21 @@ using UnityEditor.Events;
 [RequireComponent(typeof(Button))]
 public class ClickableTextUI : MonoBehaviour
 {
+	public enum ClickSoundType
+	{
+		None,
+		PaperRustling,
+		Keys,
+	}
+
 	[SerializeField]
 	private string _textDisplay = "";
 
 	[SerializeField]
 	private string _interactionId = "";
+
+	[SerializeField]
+	private ClickSoundType _clickSound = ClickSoundType.None;
 
 	public void DisplayText()
 	{
@@ -23,6 +35,7 @@ public class ClickableTextUI : MonoBehaviour
 		}
 
 		string interactionId = _interactionId.Trim();
+		PlayClickSound(interactionId);
 		if (!string.IsNullOrEmpty(interactionId))
 		{
 			DialogueManager.Instance.RecordInteraction(interactionId);
@@ -36,6 +49,43 @@ public class ClickableTextUI : MonoBehaviour
 		{
 			DialogueManager.Instance.DialogueState.StartStory(interactionId);
 		}
+	}
+
+	private void PlayClickSound(string interactionId)
+	{
+		EventReference sound = _clickSound switch
+		{
+			ClickSoundType.PaperRustling => FMODEvents.Instance.PaperRustling_Sfx,
+			ClickSoundType.Keys => FMODEvents.Instance.Keys_Sfx,
+			_ => ResolveSoundByInteractionId(interactionId),
+		};
+
+		if (!sound.IsNull)
+		{
+			AudioManager.Instance.PlayOneShot(sound);
+		}
+	}
+
+	private static EventReference ResolveSoundByInteractionId(string interactionId)
+	{
+		if (
+			interactionId.Equals("love_letter", StringComparison.OrdinalIgnoreCase)
+			|| interactionId.Equals("ned_card", StringComparison.OrdinalIgnoreCase)
+			|| interactionId.Equals("ast_book", StringComparison.OrdinalIgnoreCase)
+		)
+		{
+			return FMODEvents.Instance.PaperRustling_Sfx;
+		}
+
+		if (
+			interactionId.Equals("key", StringComparison.OrdinalIgnoreCase)
+			|| interactionId.Equals("keys", StringComparison.OrdinalIgnoreCase)
+		)
+		{
+			return FMODEvents.Instance.Keys_Sfx;
+		}
+
+		return default;
 	}
 
 #if UNITY_EDITOR

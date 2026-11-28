@@ -210,6 +210,7 @@ public class NotebookUI : MonoBehaviour
 			return;
 		}
 
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.NotepadPageTurning_Sfx);
 		bool hasOutgoingFade = false;
 
 		for (int i = 0; i < _tabs.Length; i++)
@@ -269,11 +270,13 @@ public class NotebookUI : MonoBehaviour
 			return;
 		}
 
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PaperRustling_Sfx);
 		_dragHandle.PlaceAboveBar(_bottomBar);
 	}
 
 	public void MoveToInterviewPosition()
 	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.PaperRustling_Sfx);
 		_dragHandle.MoveToPosition(_interviewPosition.position, _moveDuration, _moveEase, _useUnscaledTime);
 
 		for (int i = 0; i < _tabs.Length; i++)

@@ -26,6 +26,8 @@ public class GameManager : MonoSingleton<GameManager>
 	{
 		PrimeTweenConfig.warnZeroDuration = false;
 		PrimeTweenConfig.warnEndValueEqualsCurrent = false;
+		AudioManager.Instance.PlayMusic(FMODEvents.Instance.Gameplay_Bgm);
+		AudioManager.Instance.PlayAmbience("rain", FMODEvents.Instance.GameplayRain_Amb);
 	}
 
 	// Event Triggers

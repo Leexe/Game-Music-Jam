@@ -22,18 +22,40 @@ public class SettingsMenuUI : MonoBehaviour
 	[SerializeField]
 	private GameObject _settingsPanel;
 
+	private const float TestSfxCooldown = 0.15f;
+
 	private float _previousTimeScale;
 	private bool _cursorWasVisible;
 	private GameObject _previousSelection;
 	private bool _isOpen;
 	private bool _returningToMenu;
+	private float _lastTestSfxTime;
 
 	private void Awake()
 	{
 		foreach (VolumeControl control in _volumes)
 		{
-			control.Slider.onValueChanged.AddListener(value => AudioManager.Instance.SetVolume(control.Channel, value));
+			AudioManager.AudioBusType channel = control.Channel;
+			control.Slider.onValueChanged.AddListener(value => HandleVolumeChanged(channel, value));
 		}
+	}
+
+	private void HandleVolumeChanged(AudioManager.AudioBusType channel, float value)
+	{
+		AudioManager.Instance.SetVolume(channel, value);
+		if (Time.unscaledTime - _lastTestSfxTime < TestSfxCooldown)
+		{
+			return;
+		}
+
+		_lastTestSfxTime = Time.unscaledTime;
+		FMODUnity.EventReference testSfx = channel switch
+		{
+			AudioManager.AudioBusType.Ambience => FMODEvents.Instance.SettingsTest2_Sfx,
+			AudioManager.AudioBusType.Game => FMODEvents.Instance.SettingsTest3_Sfx,
+			_ => FMODEvents.Instance.SettingsTest1_Sfx,
+		};
+		AudioManager.Instance.PlayOneShot(testSfx);
 	}
 
 	private void OnEnable()
@@ -58,6 +80,7 @@ public class SettingsMenuUI : MonoBehaviour
 	{
 		if (!_returningToMenu)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.SettingsButton_Sfx);
 			CloseMenu();
 		}
 	}
@@ -69,6 +92,7 @@ public class SettingsMenuUI : MonoBehaviour
 			return;
 		}
 
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.SettingsButton_Sfx);
 		_returningToMenu = true;
 		AudioManager.Instance.StopAllEvents();
 		SceneManager.LoadSceneAsync("MainMenu");
@@ -81,6 +105,7 @@ public class SettingsMenuUI : MonoBehaviour
 			return;
 		}
 
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.SettingsButton_Sfx);
 		if (_settingsPanel.activeSelf)
 		{
 			CloseMenu();

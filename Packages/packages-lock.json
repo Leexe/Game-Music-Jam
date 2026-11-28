@@ -7,6 +7,12 @@
       "dependencies": {},
       "hash": "ceac8d6946b1125fe782cd171fbcb245b567dbf9"
     },
+    "com.fmod.fmod-for-unity.v204": {
+      "version": "file:fmodstudio20400.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
     "com.kybernetik.animancer": {
       "version": "file:com.kybernetik.animancer",
       "depth": 0,

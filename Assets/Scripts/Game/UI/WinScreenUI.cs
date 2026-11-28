@@ -34,6 +34,7 @@ public class WinScreenUI : MonoBehaviour
 
 	private void FadeInScreen()
 	{
+		AudioManager.Instance.PlayMusic(FMODEvents.Instance.HeiressTheme_Bgm);
 		_fadeInTween.Stop();
 		_fadeInTween = Tween.Alpha(_canvasGroup, 1f, _fadeInDuration);
 		_fadeInTween.OnComplete(() =>

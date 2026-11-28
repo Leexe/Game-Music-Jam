@@ -24,8 +24,9 @@ Thumbs.db
 !/[Aa]ssets/Gizmos/FMOD/*
 !/[Aa]ssets/Editor Default Resources/FMOD/*
 
-# Ignore the Cache folder since it is updated locally.
-/[Aa]ssets/Plugins/FMOD/Cache/*
+# FMOD regenerates its event cache locally.
+/[Aa]ssets/Resources/FMOD/FMODStudioCache.asset
+/[Aa]ssets/Resources/FMOD/FMODStudioCache.asset.meta
 
 # Ignore bank files in the StreamingAssets folder.
 /[Aa]ssets/StreamingAssets/**/*.bank

@@ -78,6 +78,7 @@ public class CameraItem : MonoBehaviour
 		if (mouse.leftButton.wasPressedThisFrame)
 		{
 			_suppressClickUntilRelease = true;
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.CameraClick_Sfx);
 			_nothingDialogueDelayTween.Stop();
 			PhotoSpot spot = FindPhotoSpotUnder(mousePos);
 			PutBack();

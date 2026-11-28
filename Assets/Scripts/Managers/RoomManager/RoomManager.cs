@@ -61,6 +61,7 @@ public class RoomManager : MonoSingleton<RoomManager>
 
 		IsTransitioning = true;
 		_fade.blocksRaycasts = true; // stops extra clicks mid-transition
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.DoorOpening_Sfx);
 
 		RectTransform roomRect = CurrentRoom.GetComponent<RectTransform>();
 		Vector2 startPos = roomRect.anchoredPosition;
@@ -86,6 +87,7 @@ public class RoomManager : MonoSingleton<RoomManager>
 				roomRect.localScale = Vector3.one;
 				roomRect.anchoredPosition = startPos;
 				GoTo(room);
+				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Step_Sfx);
 			})
 			.ChainDelay(_blackHoldDuration) // stay black for a moment
 			.Chain(Tween.Alpha(_fade, 0f, _fadeInDuration, Ease.OutQuad))

@@ -34,6 +34,7 @@ public class CombinationLock : MonoBehaviour
 		}
 
 		IsLocked = false;
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Keys_Sfx);
 		_panel.SetActive(false);
 		OnUnlocked?.Invoke();
 		if (_enterRoomOnUnlock && _pendingDoor != null) _pendingDoor.Enter();

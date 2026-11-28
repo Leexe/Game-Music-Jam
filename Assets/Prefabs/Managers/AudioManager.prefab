@@ -44,6 +44,132 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 127de193ef8664044a19abfa4dcf6497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FMODEvents
+  <MainMenu_Bgm>k__BackingField:
+    Guid:
+      Data1: 924230928
+      Data2: -1684977582
+      Data3: -1209848134
+      Data4: 735862834
+    Path: event:/BGM/MainMenu
+  <Gameplay_Bgm>k__BackingField:
+    Guid:
+      Data1: 1713217780
+      Data2: 343952803
+      Data3: 1549350668
+      Data4: -12481955
+    Path: event:/333AMETHYST - Fragment (game jam)
+  <PhoneCall_Bgm>k__BackingField:
+    Guid:
+      Data1: -473300909
+      Data2: -1029222642
+      Data3: 1997763689
+      Data4: -1825689070
+    Path: event:/BGM/PhoneCall
+  <PoliceTheme_Bgm>k__BackingField:
+    Guid:
+      Data1: -1084348464
+      Data2: 1854097162
+      Data3: -602384366
+      Data4: 1650326876
+    Path: event:/Police Theme
+  <AssistantTheme_Bgm>k__BackingField:
+    Guid:
+      Data1: -960562778
+      Data2: -876983579
+      Data3: -1294745623
+      Data4: 32214248
+    Path: event:/The Assistans Theme
+  <HeiressTheme_Bgm>k__BackingField:
+    Guid:
+      Data1: 1439337464
+      Data2: 398214887
+      Data3: 1214222763
+      Data4: 1479968493
+    Path: event:/The Heirest Theme
+  <GameplayRain_Amb>k__BackingField:
+    Guid:
+      Data1: -1032551765
+      Data2: 2072530336
+      Data3: -781013635
+      Data4: 855153765
+    Path: event:/BGM/GameplayRainAmbience
+  <CameraClick_Sfx>k__BackingField:
+    Guid:
+      Data1: -1803235562
+      Data2: -58241784
+      Data3: 1773108102
+      Data4: 612224355
+    Path: event:/CameraClick
+  <DoorOpening_Sfx>k__BackingField:
+    Guid:
+      Data1: 1571787374
+      Data2: 1872449142
+      Data3: 1694697270
+      Data4: -1985015691
+    Path: event:/DoorOpening
+  <Step_Sfx>k__BackingField:
+    Guid:
+      Data1: 45490896
+      Data2: 1018382770
+      Data3: -570421460
+      Data4: 386613756
+    Path: event:/Step
+  <Keys_Sfx>k__BackingField:
+    Guid:
+      Data1: -1195379098
+      Data2: 1837647639
+      Data3: -1977974127
+      Data4: -745581042
+    Path: event:/Keys
+  <NotepadPageTurning_Sfx>k__BackingField:
+    Guid:
+      Data1: 1129394039
+      Data2: 310922877
+      Data3: -200145155
+      Data4: 804758813
+    Path: event:/NotepadPageTurning
+  <PaperRustling_Sfx>k__BackingField:
+    Guid:
+      Data1: -354900624
+      Data2: -88979695
+      Data3: -365705781
+      Data4: -1624604734
+    Path: event:/PaperRustling
+  <PhoneRingPickUp_Sfx>k__BackingField:
+    Guid:
+      Data1: 757848084
+      Data2: -2021176702
+      Data3: -760782072
+      Data4: 362882084
+    Path: event:/PhoneRing_PickUp
+  <SettingsButton_Sfx>k__BackingField:
+    Guid:
+      Data1: 433358386
+      Data2: 2057584739
+      Data3: -800471567
+      Data4: -489342493
+    Path: event:/SettingsButton
+  <SettingsTest1_Sfx>k__BackingField:
+    Guid:
+      Data1: -1970177554
+      Data2: -1416476094
+      Data3: -843098520
+      Data4: -330236930
+    Path: event:/SettingsTest1
+  <SettingsTest2_Sfx>k__BackingField:
+    Guid:
+      Data1: -1322157752
+      Data2: 1520058781
+      Data3: -68604564
+      Data4: -762841408
+    Path: event:/SettingsTest2
+  <SettingsTest3_Sfx>k__BackingField:
+    Guid:
+      Data1: 787390985
+      Data2: -1384103218
+      Data3: -711014209
+      Data4: -1007996758
+    Path: event:/SettingsTest3
 --- !u!1 &3472308070409565324
 GameObject:
   m_ObjectHideFlags: 0
