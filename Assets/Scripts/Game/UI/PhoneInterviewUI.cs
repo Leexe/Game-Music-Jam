@@ -39,6 +39,25 @@ public class PhoneInterviewUI : MonoBehaviour
 	[SerializeField]
 	private Ease _phoneMoveEase = Ease.OutCubic;
 
+	[Title("Call Ring")]
+	[SerializeField, Min(1)]
+	private int _callRingCount = 2;
+
+	[SerializeField, Min(0f)]
+	private float _callShakeDuration = 0.45f;
+
+	[SerializeField, Min(0f)]
+	private float _callRingPause = 0.25f;
+
+	[SerializeField]
+	private Vector3 _callShakeStrength = new(8f, 8f, 0f);
+
+	[SerializeField, Min(1f)]
+	private float _callShakeFrequency = 18f;
+
+	[SerializeField]
+	private float _callShakeRotation = 8f;
+
 	[Title("Character Portrait")]
 	[SerializeField]
 	private RectTransform _characterSprite;
@@ -66,6 +85,7 @@ public class PhoneInterviewUI : MonoBehaviour
 	private RectTransform _phoneRect;
 	private Vector2 _phoneShownPos;
 	private Sequence _phoneSequence;
+	private Sequence _phoneShakeSequence;
 	private Tween _characterTween;
 	private CharacterSO _currentCharacter;
 	private bool _isCharacterShown;
@@ -98,6 +118,7 @@ public class PhoneInterviewUI : MonoBehaviour
 		_dialogue = DialogueManager.Instance;
 		_phoneButton.onClick.AddListener(StartInterview);
 		_notebook.OnCallContact += HandleCallContact;
+		_dialogue.OnGetChoiceDelay += HandleGetChoiceDelay;
 		_dialogue.DialogueState.OnStartDialogue += HandleDialogueStart;
 		_dialogue.DialogueState.OnDisplayChoices += HandleChoicesDisplayed;
 		_dialogue.OnDialogueEnded += EndInterview;
@@ -123,12 +144,14 @@ public class PhoneInterviewUI : MonoBehaviour
 	{
 		_canContinue = false;
 		_phoneSequence.Stop();
+		_phoneShakeSequence.Complete();
 		_characterTween.Stop();
 
 		_phoneButton.onClick.RemoveListener(StartInterview);
 		_notebook.OnCallContact -= HandleCallContact;
 		if (_dialogue)
 		{
+			_dialogue.OnGetChoiceDelay -= HandleGetChoiceDelay;
 			_dialogue.DialogueState.OnStartDialogue -= HandleDialogueStart;
 			_dialogue.DialogueState.OnDisplayChoices -= HandleChoicesDisplayed;
 			_dialogue.OnDialogueEnded -= EndInterview;
@@ -227,8 +250,46 @@ public class PhoneInterviewUI : MonoBehaviour
 	{
 		_canContinue = false;
 		_phoneButton.interactable = true;
+		_phoneShakeSequence.Complete();
 		AnimatePhoneUI(0f, PhoneHiddenPos);
 		HideCharacterSprite();
+	}
+
+	private float HandleGetChoiceDelay(int choiceIndex)
+	{
+		if (
+			!_dialogue.CurrentChoiceKnot.StartsWith("new_interview", StringComparison.OrdinalIgnoreCase)
+			|| _dialogue.GetChoiceText(choiceIndex).Contains("Put down", StringComparison.OrdinalIgnoreCase)
+		)
+		{
+			return 0f;
+		}
+
+		ShakePhone();
+		return _callRingCount * _callShakeDuration + Mathf.Max(0, _callRingCount - 1) * _callRingPause;
+	}
+
+	private void ShakePhone()
+	{
+		_phoneSequence.Complete();
+		_phoneShakeSequence.Complete();
+		_phoneShakeSequence = Sequence.Create(useUnscaledTime: _useUnscaledTime);
+
+		for (int i = 0; i < _callRingCount; i++)
+		{
+			if (i > 0 && _callRingPause > 0f)
+			{
+				_phoneShakeSequence.ChainDelay(_callRingPause);
+			}
+
+			_phoneShakeSequence
+				.Chain(
+					Tween.ShakeLocalPosition(_phoneRect, _callShakeStrength, _callShakeDuration, _callShakeFrequency)
+				)
+				.Group(
+					Tween.PunchLocalRotation(_phoneRect, new Vector3(0f, 0f, _callShakeRotation), _callShakeDuration)
+				);
+		}
 	}
 
 	private void AnimatePhoneUI(float targetAlpha, Vector2 targetPos)

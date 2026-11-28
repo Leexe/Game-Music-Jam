@@ -41,6 +41,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private bool _storyPlaying;
 	private bool _typewriterPlaying;
 	private Tween _choiceDelayTween;
+	private Tween _choiceSelectDelayTween;
 
 	/// <summary>
 	///     The dialogue state instance owned by this controller.
@@ -73,7 +74,10 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	/// <summary>Supplies the Ink knot name, or null for a standalone line.</summary>
 	public event Action<string> OnDialogueStarted;
 	public event Action OnDialogueEnded;
+	public event Func<int, float> OnGetChoiceDelay;
 	internal event Action OnStandaloneContinue;
+
+	public string GetChoiceText(int choiceIndex) => _story.currentChoices[choiceIndex].text;
 
 	#endregion
 
@@ -115,6 +119,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private void OnDisable()
 	{
 		_choiceDelayTween.Stop();
+		_choiceSelectDelayTween.Stop();
 		DialogueState.OnStartStory -= StartStory;
 		DialogueState.OnChoiceSelect -= ContinueStory;
 		DialogueState.OnTypewriterFinish -= SetTypewriterInactive;
@@ -270,6 +275,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		}
 
 		_choiceDelayTween.Stop();
+		_choiceSelectDelayTween.Stop();
 		_typewriterPlaying = false;
 		_needToDisplayChoices = false;
 		_choiceIndex = -1;
@@ -326,6 +332,11 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 			return;
 		}
 
+		if (_choiceSelectDelayTween.isAlive)
+		{
+			return;
+		}
+
 		// If a choice was selected, proceed down that path
 		if (_choiceIndex != -1)
 		{
@@ -369,8 +380,17 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		}
 
 		_choiceDelayTween.Stop();
+		_choiceSelectDelayTween.Stop();
 		_typewriterPlaying = false;
 		_choiceIndex = choiceIndex;
+
+		float delay = OnGetChoiceDelay?.Invoke(choiceIndex) ?? 0f;
+		if (delay > 0f)
+		{
+			_choiceSelectDelayTween = Tween.Delay(this, delay, static manager => manager.ContinueStory());
+			return;
+		}
+
 		ContinueStory();
 	}
 
@@ -380,6 +400,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	private void ExitStory()
 	{
 		_choiceDelayTween.Stop();
+		_choiceSelectDelayTween.Stop();
 		_storyPlaying = false;
 		_typewriterPlaying = false;
 		_needToDisplayChoices = false;
