@@ -50,6 +50,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 	public DialogueState DialogueState { get; } = new();
 
 	public bool IsStoryPlaying => _storyPlaying;
+	public bool HasKnot(string knotName) => !string.IsNullOrWhiteSpace(knotName) && _story != null && _story.KnotContainerWithName(knotName.Trim()) != null;
 	public string CurrentStoryText => _story != null ? _story.currentText : string.Empty;
 
 	public string CurrentChoiceKnot
@@ -515,6 +516,7 @@ public class DialogueManager : MonoSingleton<DialogueManager>
 		_tagHandlers["sfx"] = HandleSFXTag;
 		_tagHandlers["ms"] = HandleMusicTag;
 		_tagHandlers["ab"] = HandleAmbienceTag;
+		_tagHandlers["ast"] = _ => { };
 	}
 
 	/// <summary>

@@ -17,12 +17,25 @@ public class ClickableTextUI : MonoBehaviour
 
 	public void DisplayText()
 	{
-		if (!string.IsNullOrWhiteSpace(_interactionId))
+		if (CameraItem.ShouldIgnoreClick)
 		{
-			DialogueManager.Instance.RecordInteraction(_interactionId);
+			return;
 		}
 
-		DialogueManager.Instance.DisplayLoneLine(_textDisplay);
+		string interactionId = _interactionId.Trim();
+		if (!string.IsNullOrEmpty(interactionId))
+		{
+			DialogueManager.Instance.RecordInteraction(interactionId);
+		}
+
+		if (!string.IsNullOrWhiteSpace(_textDisplay))
+		{
+			DialogueManager.Instance.DisplayLoneLine(_textDisplay);
+		}
+		else if (!DialogueManager.Instance.IsStoryPlaying && DialogueManager.Instance.HasKnot(interactionId))
+		{
+			DialogueManager.Instance.DialogueState.StartStory(interactionId);
+		}
 	}
 
 #if UNITY_EDITOR

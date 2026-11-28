@@ -23,6 +23,11 @@ public class CameraItem : MonoBehaviour
 
 	private readonly List<RaycastResult> _hits = new List<RaycastResult>();
 
+	private static CameraItem _active;
+	private static bool _suppressClickUntilRelease;
+
+	public static bool ShouldIgnoreClick => _active != null || _suppressClickUntilRelease;
+
 	public bool IsHeld { get; private set; }
 
 	private void Awake()
@@ -64,6 +69,7 @@ public class CameraItem : MonoBehaviour
 		// Left-click = take a photo if there's a clue under the mouse, then put it back
 		if (mouse.leftButton.wasPressedThisFrame)
 		{
+			_suppressClickUntilRelease = true;
 			PhotoSpot spot = FindPhotoSpotUnder(mousePos);
 			PutBack();
 
@@ -71,6 +77,14 @@ public class CameraItem : MonoBehaviour
 			{
 				CameraManager.Instance.TakePhoto(spot);
 			}
+		}
+	}
+
+	private void LateUpdate()
+	{
+		if (_suppressClickUntilRelease && !Mouse.current.leftButton.isPressed)
+		{
+			_suppressClickUntilRelease = false;
 		}
 	}
 
@@ -85,6 +99,8 @@ public class CameraItem : MonoBehaviour
 		transform.SetAsLastSibling();
 
 		IsHeld = true;
+		_active = this;
+
 		if (_hideCursorWhileHeld)
 		{
 			Cursor.visible = false;
@@ -98,6 +114,7 @@ public class CameraItem : MonoBehaviour
 		_rect.anchoredPosition = _homePosition;
 
 		IsHeld = false;
+		_active = null;
 		Cursor.visible = true;
 	}
 

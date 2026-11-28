@@ -7,6 +7,10 @@ using UnityEngine.UI;
 /// </summary>
 public class PhotoSpot : MonoBehaviour
 {
+	[Tooltip("Optional ItemData asset for this clue (provides Inventory Icon and Polaroid Image).")]
+	[SerializeField]
+	private ItemData _itemData;
+
 	[Tooltip("The PNG shown in the polaroid (the past).")]
 	[SerializeField]
 	private Sprite _pastImage;
@@ -22,13 +26,17 @@ public class PhotoSpot : MonoBehaviour
 
 	[Tooltip("Hide this item from the room after it's photographed.")]
 	[SerializeField]
-	private bool _hideAfterPhoto = true;
+	private bool _hideAfterPhoto = false;
 
-	public Sprite PastImage => _pastImage;
+	public ItemData ItemData => _itemData;
+
+	public Sprite PastImage => _itemData != null && _itemData.PolaroidImage != null ? _itemData.PolaroidImage : _pastImage;
 
 	public string Caption => _caption;
 
-	public Sprite InventoryIcon => _inventoryIcon != null ? _inventoryIcon : GetComponent<Image>().sprite;
+	public Sprite InventoryIcon => _itemData != null && _itemData.Icon != null
+		? _itemData.Icon
+		: (_inventoryIcon != null ? _inventoryIcon : GetComponent<Image>().sprite);
 
 	public bool HasBeenPhotographed { get; private set; }
 

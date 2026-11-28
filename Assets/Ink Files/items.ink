@@ -51,13 +51,7 @@ Read it? #coat
 
 It's an astrology book. It's open on the pages for Leo. #ast_book
 You see "August 8th, 1964," written at the bottom of one of the pages.  #ast_book 
-That must have been her birthday.  #ast_book
-Take a picture of it? #ast_book
-+ Yes.  #ast_book
--> items 
-
-+ No.  #ast_book
--> items
+-> END
 
 === food_item === 
 

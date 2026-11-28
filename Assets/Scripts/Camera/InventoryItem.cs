@@ -31,6 +31,11 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 		PastImage = spot.PastImage;
 		Caption = spot.Caption;
 		name = spot.name;
+
+		if (spot.ItemData != null)
+		{
+			GetComponent<DraggableUI>().SetItemData(spot.ItemData);
+		}
 	}
 
 	public void OnPointerClick(PointerEventData eventData)

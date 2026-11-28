@@ -9,9 +9,9 @@ public class ItemData : ScriptableObject
 	[TextArea]
 	public string ClickDescription;
 
-	[TextArea]
-	public string Description;
-
 	[PreviewField]
 	public Sprite Icon;
+
+	[PreviewField]
+	public Sprite PolaroidImage;
 }

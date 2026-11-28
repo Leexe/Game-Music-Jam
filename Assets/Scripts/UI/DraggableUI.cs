@@ -163,6 +163,15 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 		InventorySlot = null;
 	}
 
+	public void SetItemData(ItemData itemData)
+	{
+		_itemData = itemData;
+		if (_itemName && _itemData)
+		{
+			_itemName.text = _itemData.name;
+		}
+	}
+
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if (IsInteractable && eventData.button == PointerEventData.InputButton.Left && _itemData)
